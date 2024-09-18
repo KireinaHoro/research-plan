@@ -110,16 +110,24 @@
   )
 ]
 
-#let work-package(name, duration, description) = {
-  let c = counter("work-packages")
-  c.step()
-  [
-    #set text(style: "italic")
-    #h(-1em) WP #context c.display():  #name (#duration)
+#let work-package(name, tag, duration) = {
+  show figure.where(kind: "work-package"): it => {
+    let c = counter(figure.where(kind: "work-package"))
+    let num = locate(loc => {
+      numbering(it.numbering, ..c.at(loc))
+    })
+    [
+      #set text(style: "italic")
+      #h(-1em) WP #num: #it.body #parbreak()
+    ]
+  }
 
+  [
+    #figure(
+      [#name (#duration)],
+      kind: "work-package", supplement: "WP", numbering: "1",
+    ) #tag
   ]
-  description
-  parbreak()
 }
 
 #let todo(msg) = text(red, [*TODO*: #msg])
