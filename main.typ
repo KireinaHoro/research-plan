@@ -1,5 +1,5 @@
-#import "style.typ": conf
-#show: doc => conf(
+#import "infk-research-plan.typ": document, todo
+#show: document(
   student-name: [Pengcheng Xu],
   student-number: [21-951-876],
   supervisor-name: [Prof. Dr. Timothy Roscoe],
@@ -7,7 +7,6 @@
   // XXX: do we count from the beginning of contract, or DD enroll?
   start-date: datetime(year: 2023, month: 12, day: 1),
   title: [Co-designing HW and OS for Efficient Datacenter Communication],
-  doc
 )
 
 = Research Proposal

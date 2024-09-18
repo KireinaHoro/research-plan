@@ -1,14 +1,13 @@
 #let rule(length) = line(start: (0pt, 1em), end: (length, 1em))
 
-#let conf(
+#let document(
   student-name: [Happy Student],
   student-number: [00-000-000],
   supervisor-name: [Prof. Dr. Jane Doe],
   second-advisor-name: [Prof. Dr. John Doe],
   start-date: datetime.today(),
   title: [Awesome PhD Research],
-  doc,
-) = {
+) = doc => {
   // try to mimic the look and feel of the latex template
   set text(
     font: "New Computer Modern",
@@ -31,12 +30,12 @@
           #set text(size: 8pt)
           *Department of Computer Science* \
           *Doctoral administration*
-          
+
           ETH Zurich \
           CAB H 37.1 \
           Universitätstrasse 6 \
           CH-8092 Zurich
-          
+
           #link("mailto:doctorate@inf.ethz.ch")[doctorate\@inf.ethz.ch] \
           #link("https://www.inf.ethz.ch")[inf.ethz.ch]
         ]
@@ -80,10 +79,10 @@
       title
     )
   ]
-  
+
   {
-    show heading.where(level: 1): set heading(numbering: n => "Part " + str(n))
-    show heading.where(level: 2): set heading(numbering: (f, s) => str(s) + ". ")
+    show heading.where(level: 1): set heading(numbering: n => [Part #n])
+    show heading.where(level: 2): set heading(numbering: (f, s) => [#s. ])
 
     text(doc)
   }
@@ -105,3 +104,5 @@
     )
   }
 }
+
+#let todo(msg) = text(red, [*TODO*: #msg])
