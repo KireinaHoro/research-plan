@@ -1,5 +1,5 @@
 #import "infk-doctoral-plan.typ": document, todo, work-package
-#show: document(
+#show: document.with(
   student-name: [Pengcheng Xu],
   student-number: [21-951-876],
   supervisor-name: [Prof. Dr. Timothy Roscoe],

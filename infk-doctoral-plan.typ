@@ -7,7 +7,8 @@
   second-advisor-name: [Prof. Dr. John Doe],
   start-date: datetime.today(),
   title: [Awesome PhD Research],
-) = doc => [
+  doc
+) = [
   // try to mimic the look and feel of the latex template
   #set text(
     font: "New Computer Modern",
