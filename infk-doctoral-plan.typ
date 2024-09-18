@@ -22,6 +22,10 @@
   #show par: set block(spacing: 0.55em, above: 1.4em)
   #show heading: set block(above: 1.4em, below: 1em)
 
+  // make links visible
+  #show link: box.with(stroke: aqua)
+  #show ref: box.with(stroke: lime)
+
   // D-INFK doctoral administration header & footer
   #set page(
     paper: "a4",
