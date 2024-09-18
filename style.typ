@@ -1,8 +1,10 @@
+#let rule(length) = line(start: (0pt, 1em), end: (length, 1em))
+
 #let conf(
   student-name: [Happy Student],
   student-number: [00-000-000],
   supervisor-name: [Prof. Dr. Jane Doe],
-  second-supervisor-name: [Prof. Dr. John Doe],
+  second-advisor-name: [Prof. Dr. John Doe],
   start-date: datetime.today(),
   title: [Awesome PhD Research],
   doc,
@@ -66,7 +68,7 @@
       [Name Doctoral Student], student-name,
       [Student Number], student-number,
       [Name Supervisor], supervisor-name,
-      [Name Second Supervisor], second-supervisor-name,
+      [Name Second Advisor], second-advisor-name,
       [Start of Doctorate], start-date.display("[day] [month repr:long] [year]"),
     )
 
@@ -79,8 +81,27 @@
     )
   ]
   
-  show heading.where(level: 1): set heading(numbering: n => "Part " + str(n))
-  show heading.where(level: 2): set heading(numbering: (f, s) => str(s) + ". ")
+  {
+    show heading.where(level: 1): set heading(numbering: n => "Part " + str(n))
+    show heading.where(level: 2): set heading(numbering: (f, s) => str(s) + ". ")
 
-  text(doc)
+    text(doc)
+  }
+
+  pagebreak()
+
+  [= Signatures]
+
+  {
+    table(
+      columns: (auto, 1fr),
+      stroke: none,
+      row-gutter: 1em,
+
+      [Supervisor], rule(100%),
+      [Second Advisor], rule(100%),
+      [Doctoral Student], rule(100%),
+      [Date], rule(100%),
+    )
+  }
 }
