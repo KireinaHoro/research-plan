@@ -7,16 +7,16 @@
   second-advisor-name: [Prof. Dr. John Doe],
   start-date: datetime.today(),
   title: [Awesome PhD Research],
-) = doc => {
+) = doc => [
   // try to mimic the look and feel of the latex template
-  set text(
+  #set text(
     font: "New Computer Modern",
     size: 11pt
   )
-  set par(justify: true)
+  #set par(justify: true)
 
   // D-INFK doctoral administration header & footer
-  set page(
+  #set page(
     paper: "a4",
     margin: (x: 1in, top: 2.75in, bottom: 1in),
     header: [
@@ -55,54 +55,51 @@
       )
     ],
   )
-  [
-    = Research Plan
 
-    == Basic Information
+  = Research Plan
 
-    #table(
-      columns: (auto, 1fr),
-      stroke: none,
+  == Basic Information
 
-      [Name Doctoral Student], student-name,
-      [Student Number], student-number,
-      [Name Supervisor], supervisor-name,
-      [Name Second Advisor], second-advisor-name,
-      [Start of Doctorate], start-date.display("[day] [month repr:long] [year]"),
-    )
+  #table(
+    columns: (auto, 1fr),
+    stroke: none,
 
-    Title Research Proposal
+    [Name Doctoral Student], student-name,
+    [Student Number], student-number,
+    [Name Supervisor], supervisor-name,
+    [Name Second Advisor], second-advisor-name,
+    [Start of Doctorate], start-date.display("[day] [month repr:long] [year]"),
+  )
 
-    #rect(
-      width: 100%,
-      height: 6em,
-      title
-    )
-  ]
+  Title Research Proposal
 
-  {
+  #rect(
+    width: 100%,
+    height: 6em,
+    title
+  )
+
+  #{
     show heading.where(level: 1): set heading(numbering: n => [Part #n])
-    show heading.where(level: 2): set heading(numbering: (f, s) => [#s. ])
+    show heading.where(level: 2): set heading(numbering: (f, s) => [#s.  ])
 
-    text(doc)
+    doc
   }
 
-  pagebreak()
+  #pagebreak()
 
-  [= Signatures]
+  = Signatures
 
-  {
-    table(
-      columns: (auto, 1fr),
-      stroke: none,
-      row-gutter: 1em,
+  #table(
+    columns: (auto, 1fr),
+    stroke: none,
+    row-gutter: 1em,
 
-      [Supervisor], rule(100%),
-      [Second Advisor], rule(100%),
-      [Doctoral Student], rule(100%),
-      [Date], rule(100%),
-    )
-  }
-}
+    [Supervisor], rule(100%),
+    [Second Advisor], rule(100%),
+    [Doctoral Student], rule(100%),
+    [Date], rule(100%),
+  )
+]
 
 #let todo(msg) = text(red, [*TODO*: #msg])
