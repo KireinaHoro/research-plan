@@ -13,12 +13,18 @@
     font: "New Computer Modern",
     size: 11pt
   )
-  #set par(justify: true)
+  #set par(
+    leading: 0.55em,
+    justify: true
+  )
+  #show raw: set text(font: "New Computer Modern Mono")
+  #show par: set block(spacing: 0.55em, above: 1.4em)
+  #show heading: set block(above: 1.4em, below: 1em)
 
   // D-INFK doctoral administration header & footer
   #set page(
     paper: "a4",
-    margin: (x: 1in, top: 2.75in, bottom: 1in),
+    margin: (x: 1in, top: 0.75in + 11em, bottom: 0.75in + 1em),
     header: [
       #grid(
         columns: (6fr, 4fr),
@@ -45,7 +51,7 @@
       #grid(
         columns: (1fr, auto, 1fr),
         align: (left, center, right),
-        [Research Plan],
+        [Doctoral Plan],
         [
           #counter(page).display(
             "1",
@@ -56,7 +62,7 @@
     ],
   )
 
-  = Research Plan
+  = Doctoral Plan
 
   == Basic Information
 
@@ -80,8 +86,10 @@
   )
 
   #{
-    show heading.where(level: 1): set heading(numbering: n => [Part #n])
-    show heading.where(level: 2): set heading(numbering: (f, s) => [#s.  ])
+    show heading.where(level: 2): set heading(numbering: (_, lvl) => [Part #lvl #h(1em)])
+    show heading.where(level: 3): set heading(numbering: (_, _, lvl) => [#lvl. #h(1em)])
+
+    set heading(offset: 1)
 
     doc
   }
@@ -101,5 +109,17 @@
     [Date], rule(100%),
   )
 ]
+
+#let work-package(name, duration, description) = {
+  let c = counter("work-packages")
+  c.step()
+  [
+    #set text(style: "italic")
+    #h(-1em) WP #context c.display():  #name (#duration)
+
+  ]
+  description
+  parbreak()
+}
 
 #let todo(msg) = text(red, [*TODO*: #msg])

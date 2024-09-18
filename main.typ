@@ -1,4 +1,4 @@
-#import "infk-research-plan.typ": document, todo
+#import "infk-doctoral-plan.typ": document, todo, work-package
 #show: document(
   student-name: [Pengcheng Xu],
   student-number: [21-951-876],
@@ -42,3 +42,4 @@
 = Other Duties
 
 = Study Plan
+
