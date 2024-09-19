@@ -12,10 +12,13 @@
 #import "@preview/glossarium:0.4.1": make-glossary, print-glossary, gls, glspl
 #show: make-glossary
 
+#import "@preview/cetz:0.2.2"
 #import "glossary.typ": glossary
 
 #let show-page-limits = true
 #let lim(len) = if show-page-limits { text(blue)[(#len)] }
+
+#show regex("\bus\b"): [#{sym.mu}s]
 
 = Research Proposal
 
@@ -60,37 +63,52 @@ introduced, as well as how they interact with existing components.
 
 == Introduction #lim[ca 1 page]
 
-#todo[following is copied from OSDI poster abstract.  refactor]
-
 Virtually all workloads running in datacenters require communication with other
-systems in some way; one of the most commonly used paradigms for such is @rpc.  They are the cornerstone of virtually all networked
-systems, including micro-services, serverless, networked filesystems, and many
-more.  Previous work on characterizing @rpc workloads
-@seemakhupt_cloud-scale_2023 demonstrated that short @rpc invocations in the
-ballpark of 1 microsecond make up a significant portion of all @rpc workloads.
+systems in some way; one of the most commonly used paradigms for such is @rpc.
+They are the cornerstone of virtually all networked systems, including
+micro-services, serverless computing, networked filesystems, and many more.
+Previous work on characterizing @rpc workloads~@seemakhupt_cloud-scale_2023
+demonstrated that short @rpc invocations in the ballpark of 1 us make up a
+significant portion of all @rpc workloads.
 
 Despite the high frequency of short @rpc workloads, traditional datacenter @rpc
-architecture using PCIe @dma #glspl("nic") incur high latency and CPU overhead.  We
-identify three classes of overhead in the traditional PCIe @dma @rpc
+architecture using PCIe @dma #glspl("nic") incur high latency and CPU overhead.
+We identify three classes of overhead in the traditional PCIe @dma @rpc
 architecture: protocol overhead from marshaling and unmarshaling, session
-maintenance, encryption and decryption, and more; @dma overhead from the need to
-set up descriptor rings, various queues, and @dma buffers; and schedule overhead
-from the need to multiplex CPU cores between normal workload and handling
-events from the @nic via interrupt requests (IRQ), and to deliver packet data to
-the correct user space application.  All these overheads come on top of the
-actual CPU cycles spent executing the actual @rpc handler, significantly
-lowering efficiency in @rpc processing.
+maintenance, encryption and decryption, and more; @dma overhead from the need
+to set up descriptor rings, various queues, and @dma buffers; and schedule
+overhead from the need to multiplex CPU cores between normal workload and
+handling events from the @nic via @irq, and to deliver packet data to the
+correct user space application.  All these overheads come on top of the actual
+CPU cycles spent executing the actual @rpc handler.  Many of these overheads
+are fixed, not scaling with the size of the request and response, meaning that
+they dispropotionately impact short invocations and significantly lowering
+efficiency in their processing.  These overheads contradict with the ever
+increasing demand for higher processing efficiency by datacenters.
 
-The modern data center architecture, however, looks vastly different from the
-traditional case.  Servers are dedicated to handling @rpc requests rather than
-shared with other tasks and a single CPU server can come with over a hundred
-cores, making obsolete mechanisms for multiplexing CPU time between multiple
-tasks.
-
-Cache-coherent interconnects allow for communication between the CPU
+We recognize that the aforementioned overheads come from the fundamental
+assumptions of PCIe about the system architecture: requests are long; bus
+latency is high; a server has few cores; there are many tasks other than
+network processing.  The modern data center architecture, however, looks vastly
+different from these traditional assumptions.  In most hyper-scalers, entire
+servers are dedicated to handling @rpc requests rather than shared with other
+tasks.  In addition, a single CPU server can come with over a hundred cores,
+making obsolete mechanisms for multiplexing CPU time between multiple tasks.
+Emerging cache-coherent interconnects allow for communication between the CPU
 and @nic lower latency and higher throughput, without the need for huge batch
-sizes.  Climate change and power budgets demand for higher energy efficiency in
-data centers.
+sizes.
+
+Our vision to resolve this problem is to co-design the @nic and OS, taking full
+advantage of cache-coherent interconnects.  We will build a cache-coherent
+offloading smart @nic to free the CPU cores that run @rpc service handlers from
+all overheads due to network and protocol processing.  The @nic would be
+tightly integrated with various aspects of the OS, such as task scheduling and
+memory management.  Since we integrate deeply and fundamentally with the OS,
+security is of utmost importance; we plan to employ various formal methods
+approaches to verify the correctness of critical components and how they
+interact with the rest of the system.  For a successful solution with
+real-world impact, we also tackle important concerns for production
+environments such as multi-tenancy, inspectability, and accounting.
 
 == Current State of Research in the Field #lim[ca 2-3 page]
 
