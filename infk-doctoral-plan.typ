@@ -30,41 +30,31 @@
   #set page(
     paper: "a4",
     margin: (x: 1in, top: 0.75in + 11em, bottom: 0.75in + 1em),
-    header: [
-      #grid(
-        columns: (6fr, 4fr),
-        align: top,
-        [
-          #image("logo.svg", width: 60%)
-        ],
-        [
-          #set text(size: 8pt)
-          *Department of Computer Science* \
-          *Doctoral administration*
+    header: grid(
+      columns: (6fr, 4fr),
+      align: top,
+      image("logo.svg", width: 60%),
+      [
+        #set text(size: 8pt)
+        *Department of Camputer Science* \
+        *Doctoral administration*
 
-          ETH Zurich \
-          CAB H 37.1 \
-          Universitätstrasse 6 \
-          CH-8092 Zurich
+        ETH Zurich \
+        CAB H 37.1 \
+        Universitätstrasse 6 \
+        CH-8092 Zurich
 
-          #link("mailto:doctorate@inf.ethz.ch")[doctorate\@inf.ethz.ch] \
-          #link("https://www.inf.ethz.ch")[inf.ethz.ch]
-        ]
-      )
-    ],
-    footer: context [
-      #grid(
-        columns: (1fr, auto, 1fr),
-        align: (left, center, right),
-        [Doctoral Plan],
-        [
-          #counter(page).display(
-            "1",
-          )
-        ],
-        [#datetime.today().display("[month repr:long] [year]")]
-      )
-    ],
+        #link("mailto:doctorate@inf.ethz.ch")[doctorate\@inf.ethz.ch] \
+        #link("https://www.inf.ethz.ch")[inf.ethz.ch]
+      ]
+    ),
+    footer: grid(
+      columns: (1fr, auto, 1fr),
+      align: (left, center, right),
+      [Doctoral Plan],
+      counter(page).display("1"),
+      datetime.today().display("[month repr:long] [year]")
+    ),
   )
 
   = Doctoral Plan
@@ -91,8 +81,19 @@
   )
 
   #{
+    // XXX: redefining numbering affects @ syntax
     show heading.where(level: 2): set heading(numbering: (_, lvl) => [Part #lvl #h(1em)])
     show heading.where(level: 3): set heading(numbering: (_, _, lvl) => [#lvl. #h(1em)])
+
+    // show rules for work packages
+    show figure.where(kind: "work-package"): it => [
+      #let c = counter(figure.where(kind: "work-package"))
+      #let num = locate(loc => {
+        numbering(it.numbering, ..c.at(loc))
+      })
+      #set text(style: "italic")
+      #h(-1em) WP #num: #it.body #parbreak()
+    ]
 
     set heading(offset: 1)
 
@@ -115,24 +116,9 @@
   )
 ]
 
-#let work-package(name, tag, duration) = {
-  show figure.where(kind: "work-package"): it => {
-    let c = counter(figure.where(kind: "work-package"))
-    let num = locate(loc => {
-      numbering(it.numbering, ..c.at(loc))
-    })
-    [
-      #set text(style: "italic")
-      #h(-1em) WP #num: #it.body #parbreak()
-    ]
-  }
-
-  [
-    #figure(
-      [#name (#duration)],
-      kind: "work-package", supplement: "WP", numbering: "1",
-    ) #tag
-  ]
-}
+#let work-package(name, duration) = figure(
+  [#name (#duration)],
+  kind: "work-package", supplement: "WP", numbering: "1",
+)
 
 #let todo(msg) = text(red, [*TODO*: #msg])

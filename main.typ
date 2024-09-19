@@ -95,19 +95,19 @@ Mention previous work:
 
 == Detailed Work Plan
 
-#work-package([Basic RPC NIC], <basic-nic>, [3 months])
+#work-package([Basic RPC NIC], [3 months]) <basic-nic>
 Work item description
 
-#work-package([Integrated task scheduling], <scheduling>, [3 months])
+#work-package([Integrated task scheduling], [3 months]) <scheduling>
 Work item description
 
-#work-package([Integrated memory management], <mem-mgmt>, [3 months])
+#work-package([Integrated memory management], [3 months])
 Work item description
 
-#work-package([Security through formal verification], <formal>, [3 months])
+#work-package([Security through formal verification], [3 months])
 Work item description
 
-#work-package([Multi-tenancy and virtualization], <virt>, [3 months])
+#work-package([Multi-tenancy and virtualization], [3 months])
 Work item description
 
 == Publication Plan
