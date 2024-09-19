@@ -9,21 +9,51 @@
   title: [Co-designing HW and OS for Efficient Datacenter Communication],
 )
 
+#let show-page-limits = true
+#let lim(len) = if show-page-limits { text(blue)[(#len)] }
+
 = Research Proposal
 
-== Abstract
+== Abstract #lim[max $frac(1, 2)$ page]
 
-Datacenter communications have been dominated by PCIe DMA.  However, while DMA
-is optimized for throughput, it is not ideal for latency-sensitive
-communication (for example datacenter RPCs).  Latency is a proxy of efficiency.
-In this research plan, we underline the vision of achieving high-efficiency
-datacenter communication with help of co-designing the hardware and OS
-software.  Specifically, we achieve this with the help of emerging cache
-coherence interconnects between CPUs and networking devices.
+/*
+- current dc comm has many small transactions
+- design is around PCIe DMA, which is optimized for high throughput
+  - optimizations disproportionately punish small transactions
+- small transactions are commonplace
+- overhead harms efficiency, against the goals of nowaday datacenters
+- our fix: co-design hw and os with help of emerging cache-coherent interconnects
+- concerns three important aspects targeting a real-world deployable system:
+  - efficiency
+  - deployability
+  - security
+- current progress: NIC building, ECI/PIO paper
+  */
 
-#todo[Rewrite with abstract outline guide]
+Datacenter communication patterns are becoming increasingly oriented towards
+smaller transactions with the recent trend of micro-services and serverless
+computing.  However, datacenter communication systems have been traditionally
+designed around PCIe DMA, an interconnect standard designed and highly
+optimized for high-throughput workloads.  The design of PCIe DMA
+disproportionately penalizes small transactions with various overheads,
+contradicting with the trend of pursuing higher efficiency.
 
-== Introduction and Current State of Research in the Field
+In this research plan, we present our vision to achieve efficient datacenter
+communication through a co-design of hardware and operating system, utilizing
+emerging cache-coherent interconnect standards between CPUs and custom-built
+NICs.  We focus on three main aspects for building a successful solution:
+efficiency, deployability, and provable security.  We pursue high efficieny by
+building cache-coherent smart NICs with protocol offloading capabilities,
+aiming to eliminate all existing communication overheads.  We ensure
+deployability by designing our software and hardware with attention to
+requirements in production environments, such as multi-tenancy, inspection and
+telemetry, and debugging.  We target provable security by formally verifying
+critical software and hardware components introduced, as well as how they
+interact with existing components.
+
+#pagebreak(weak: true)
+
+== Introduction #lim[ca 1 page]
 
 #todo[following is copied from OSDI poster abstract.  refactor]
 
@@ -56,9 +86,11 @@ and NIC lower latency and higher throughput, without the need for huge batch
 sizes.  Climate change and power budgets demand for higher energy efficiency in
 data centers.
 
+== Current State of Research in the Field #lim[ca 2-3 page]
+
 #todo[mention dagger, cc-nic, etc.]
 
-== Goals of the Thesis
+== Goals of the Thesis #lim[ca 2-3 pages] <goals>
 
 #todo[expand final goal: to achieve efficient datacenter communication]
 
@@ -86,14 +118,19 @@ nanoseconds, making a promising case for our latency target.
 #todo[mention aspects of the system that needs attention: basic functionality,
 scheduling optimization, mem mgmt, security/formal, multi-tenancy]
 
-== Progress to Date
+== Progress to Date #lim[ca $frac(1, 2)$ page]
 
 Mention previous work:
 - FPsPIN work
 - demo ECI NIC for PIO paper
 - work in progress for simple RPC offloading NIC (decode pipeline, etc.)
 
-== Detailed Work Plan
+== Detailed Work Plan #lim[ca 1 page] <work-pkgs>
+
+We list out the exact work packages for each critical aspect of concern, as we
+have previously detailed in #link(<goals>)[Goals of the Thesis].
+
+=== Performance guarantees
 
 #work-package([Basic RPC NIC], [3 months]) <basic-nic>
 Work item description
@@ -115,9 +152,10 @@ Work item description
 The basic RPC NIC integrated with task scheduling (@basic-nic and @scheduling)
 should result in one paper in a systems top conference (e.g. ASPLOS, SOSP).
 
-== Time Schedule
+== Time Schedule #lim[ca $frac(1, 2)$ page]
 
-== References
+== References #lim[ca 1 page]
+
 
 = Teaching Responsibilities
 
