@@ -22,8 +22,14 @@
   #show par: set block(spacing: 0.55em, above: 1.4em)
   #show heading: set block(above: 1.4em, below: 1em)
 
-  // make links visible
-  #show link: box.with(stroke: aqua)
+  // make links visible (do not highlight labels, etc.)
+  #show link: it => {
+    if type(it.dest) == str and it.dest.match(regex("(http|https|mailto)")) != none {
+      box(stroke: aqua, it)
+    } else {
+      it
+    }
+  }
   #show ref: box.with(stroke: lime)
 
   // D-INFK doctoral administration header & footer
