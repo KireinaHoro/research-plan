@@ -53,7 +53,7 @@ communication through a co-design of hardware and operating system, utilizing
 emerging cache-coherent interconnect standards between CPUs and custom-built
 #glspl("nic", long: false).  We focus on three main aspects for building a
 successful solution: efficiency, deployability, and provable security.  We
-pursue high efficieny by building cache-coherent smart #glspl("nic") with
+pursue high efficieny by building a cache-coherent smart #glspl("nic") with
 protocol offloading capabilities, aiming to eliminate all existing
 communication overheads.  We ensure deployability by designing our software and
 hardware with attention to requirements in production environments, such as
@@ -105,16 +105,83 @@ advantage of cache-coherent interconnects.  We will build a cache-coherent
 offloading smart @nic to free the CPU cores that run @rpc service handlers from
 all overheads due to network and protocol processing.  The @nic would be
 tightly integrated with various aspects of the OS, such as task scheduling and
-memory management.  Since we integrate deeply and fundamentally with the OS,
-security is of utmost importance; we plan to employ various formal methods
-approaches to verify the correctness of critical components and how they
-interact with the rest of the system.  For a successful solution with
+memory management.  Since most @rpc protocols are designed to be processed on
+the CPU, we also need to explore what type of network protocols are suitable
+for efficient implementation in hardware.  For a successful solution with
 real-world impact, we also tackle important concerns for production
-environments such as multi-tenancy, inspectability, and accounting.
+environments such as multi-tenancy, inspectability, and accounting.  As we
+integrate deeply and fundamentally with the OS, security is of utmost
+importance; we plan to employ various formal methods approaches to verify the
+correctness of critical components and how they interact with the rest of the
+system.
+
+#pagebreak(weak: true)
 
 == Current State of Research in the Field #lim[ca 2-3 page]
 
-#todo[mention dagger, cc-nic, etc.  steal from PIO paper related work]
+=== Cache Coherence Interconnects
+
+Various industry standards for cache-coherent interconnects in datacenters have
+been under development and are gradually seeing wider adoption.  Examples in
+this field include OpenCAPI, Gen-Z, and CCIX; these protocols are based on
+different physical layer standards and upper protocols.  They have been
+superceded by and largely absorbed into CXL, which aims to the one standard
+interoperable interconnect standard across vendors.  While CXL has been hyped
+by many researchers, adoption has been slow due to lack of hardware
+implementation.
+
+Other notable coherent interconnects include TileLink for RISC-V systems as
+well as AMBA ACE from ARM; both of which are mainly implemented in low-power
+embedded systems instead of server-scale hardware.  NVLink 2.0 from NVIDIA
+features cache coherence in high-performance hardware but is closed and
+proprietary.  As a result from various restrictions in existing protocols,
+research on cache-coherent interconnects are largely performed on experimental
+systems like Intel HARP and Enzian~@cock_enzian_2022.
+
+=== Communication Pattern
+
+The communication pattern between CPU and peripheral device has been
+extensively studied.  Previous works such as hXDP and kPIO+WC have shown the
+high overhead of PCIe @dma for smaller transactions and attempts to mitigate
+either by processing them solely on the CPU or using PCIe @pio for lower
+latency.
+
+Extra efficiency can be achieved with cache-coherent interconnects other than
+PCIe.  Dagger~@lazarev_dagger_2021 builds on the UPI/CCI-P implementation of
+Intel HARP an FPGA NIC for low-latency RPC, focusing mainly on using the UPI
+interconnect as a @nic interface to offload @rpc protocol processing.  Previous
+work in the group on @pio~@ruzhanskaia_rethinking_nodate showed that it is
+possible to achieve higher efficiency with @pio using cache-coherent
+interconnects.
+
+Many works have since long discovered that a cache line is a better unit of
+transfer for workloads where small transfers are commonplace; notable examples
+are FastForward and Barrelfish UMP.  Shinjuku~@kaffes_shinjuku_2019 and
+Concord~@iyer_achieving_2023 are more recent examples of employing this idea
+for low-latency scheduling via one polled cache line between the CPU and @nic.
+This observation coincides with findings from a recent study from
+Google~@seemakhupt_cloud-scale_2023, which highlights the importance of
+efficient small transfers in datacenter @rpc due to their high frequency.
+
+#todo[Cohort?]
+
+=== Integration with OS
+
+#todo[thread/task scheduling; memory management
+
+papers: Shinjuku, Shenango, Caladan, Demikernel, Wave]
+
+=== Telemetry and Instrumentation
+
+multi-tenancy and virtualization
+
+inspectability, robustness, accounting, debugging
+
+=== Offload-friendly Network Protocol Design
+
+=== Security and Verification
+
+formal verification of hardware
 
 == Goals of the Thesis #lim[ca 2-3 pages] <goals>
 
