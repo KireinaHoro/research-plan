@@ -18,7 +18,9 @@
 #let show-page-limits = true
 #let lim(len) = if show-page-limits { text(blue)[(#len)] }
 
-#show regex("\bus\b"): [#{sym.mu}s]
+// replace microsecond with greek letter
+#let us_rgx = regex("(\d) us\b")
+#show us_rgx: it => [#it.text.match(us_rgx).captures.first() #{sym.mu}s]
 
 = Research Proposal
 
