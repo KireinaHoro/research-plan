@@ -26,20 +26,6 @@
 
 == Abstract #lim[max $frac(1, 2)$ page]
 
-/*
-- current dc comm has many small transactions
-- design is around PCIe DMA, which is optimized for high throughput
-  - optimizations disproportionately punish small transactions
-- small transactions are commonplace
-- overhead harms efficiency, against the goals of nowaday datacenters
-- our fix: co-design hw and os with help of emerging cache-coherent interconnects
-- concerns three important aspects targeting a real-world deployable system:
-  - efficiency
-  - deployability
-  - security
-- current progress: NIC building, ECI/PIO paper
-  */
-
 Datacenter communication patterns are becoming increasingly oriented towards
 smaller transactions with the recent trend of micro-services and serverless
 computing.  However, datacenter communication systems have been traditionally
@@ -185,7 +171,24 @@ formal verification of hardware
 
 == Goals of the Thesis #lim[ca 2-3 pages] <goals>
 
-#todo[expand final goal: to achieve efficient datacenter communication; recap three points from abstract]
+#show ref: it => {
+  let t = query(it.target).first()
+  if t.numbering == none {
+    link(it.target, t.body)
+  } else {
+    it
+  }
+}
+
+First and foremost, we need a base prototype system to demonstrate the
+feasibility of our approach to higher efficiency; we explain this in
+@goals-prototype.  After attaining the prototype, we then tackle various real
+world problems that affect deployability of our solutions in production
+environments as we explain in @goals-deployability.  Finally, we explore how we
+can prove that the resulting system is secure and reliable with formal methods
+in @goals-security.
+
+=== Prototype System <goals-prototype>
 
 In our ongoing project, Enzian Fast @rpc, we propose an accelerated
 communication architecture that fuses the @nic and the OS with coherently
@@ -203,10 +206,14 @@ requests to be handled on a specific core.  The CPU core would load a cacheline
 from the smart @nic containing all necessary information to start executing the
 @rpc workload directly and eliminating schedule overhead.
 
-We set an ambitious target for end-to-end @rpc latency of 1 microsecond.
+We set an ambitious target for end-to-end @rpc latency of 1 us.
 Preliminary results on Enzian [2] show that we can send and receive Ethernet
 frames from the CPU over the ECI cache coherence protocol in around 800
 nanoseconds, making a promising case for our latency target.
+
+=== Deployability <goals-deployability>
+
+=== Security <goals-security>
 
 #todo[mention aspects of the system that needs attention: basic functionality,
 scheduling optimization, mem mgmt, security/formal, multi-tenancy]
@@ -223,9 +230,12 @@ Mention previous work:
 We list out the exact work packages for each critical aspect of concern, as we
 have previously detailed in #link(<goals>)[Goals of the Thesis].
 
-=== Performance guarantees
+=== Prototype System
 
 #work-package([Basic @rpc @nic], [3 months]) <basic-nic>
+Work item description
+
+#work-package([Protocol design for HW offloading], [3 months])
 Work item description
 
 #work-package([Integrated task scheduling], [3 months]) <scheduling>
@@ -234,10 +244,17 @@ Work item description
 #work-package([Integrated memory management], [3 months])
 Work item description
 
-#work-package([Security through formal verification], [3 months])
+=== Deployability
+
+#work-package([Multi-tenancy, Virtualization], [3 months])
 Work item description
 
-#work-package([Multi-tenancy and virtualization], [3 months])
+#work-package([Instrumentation, Telemetry, Robustness], [3 months])
+Work item description
+
+=== Security
+
+#work-package([Security through formal verification], [3 months])
 Work item description
 
 == Publication Plan
@@ -247,11 +264,26 @@ should result in one paper in a systems top conference (e.g. ASPLOS, SOSP).
 
 == Time Schedule #lim[ca $frac(1, 2)$ page]
 
+#todo[draw a Gantt diagram with the @work-pkgs defined above]
+
+#cetz.canvas({
+  import cetz.draw: *
+
+  circle((0, 0), name: "circle")
+
+  fill(red)
+  stroke(none)
+  circle("circle.east", radius: 0.3)
+})
+
 == References #lim[ca 1 page]
 
-#bibliography("citations.bib",
-  title: none,
-  style: "ieee")
+#{
+  set text(size: 10pt)
+  bibliography("citations.bib",
+    title: none,
+    style: "ieee")
+}
 
 == Glossary
 
