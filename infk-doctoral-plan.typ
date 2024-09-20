@@ -1,5 +1,17 @@
 #let rule(length) = line(start: (0pt, 1em), end: (length, 1em))
 
+#let to-string(content) = {
+  if content.has("text") {
+    content.text
+  } else if content.has("children") {
+    content.children.map(to-string).join("")
+  } else if content.has("body") {
+    to-string(content.body)
+  } else if content == [ ] {
+    " "
+  }
+}
+
 #let document(
   student-name: [Happy Student],
   student-number: [00-000-000],
@@ -22,13 +34,15 @@
   #show par: set block(spacing: 0.55em, above: 1.4em)
   #show heading: set block(above: 1.4em, below: 1em)
 
-  // make links visible (do not highlight labels, etc.)
+  // make links visible (do not highlight glossary labels)
   #show link: it => {
-    if type(it.dest) == str and it.dest.match(regex("(http|https|mailto)")) != none {
-      box(stroke: aqua, it)
-    } else {
-      it
-    }
+    let boxed = box(stroke: aqua, it)
+    if type(it.dest) == label {
+      let prev-heading = query(heading.where(level: 3).before(it.dest)).last()
+      if to-string(prev-heading).match("Glossary") != none {
+        it
+      } else { boxed }
+    } else { boxed }
   }
   #show ref: box.with(stroke: lime)
 
