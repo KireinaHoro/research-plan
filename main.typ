@@ -39,7 +39,7 @@ communication through a co-design of hardware and operating system, utilizing
 emerging cache-coherent interconnect standards between CPUs and custom-built
 #glspl("nic", long: false).  We focus on three main aspects for building a
 successful solution: efficiency, deployability, and provable security.  We
-pursue high efficieny by building a cache-coherent smart #glspl("nic") with
+pursue high efficieny by building a cache-coherent smart @nic[s] with
 protocol offloading capabilities, aiming to eliminate all existing
 communication overheads.  We ensure deployability by designing our software and
 hardware with attention to requirements in production environments, such as
@@ -60,7 +60,7 @@ demonstrated that short @rpc invocations in the ballpark of 1 us make up a
 significant portion of all @rpc workloads.
 
 Despite the high frequency of short @rpc workloads, traditional datacenter @rpc
-architecture using PCIe @dma #glspl("nic") incur high latency and CPU overhead.
+architecture using PCIe @dma @nic[s] incur high latency and CPU overhead.
 We identify three classes of overhead in the traditional PCIe @dma @rpc
 architecture: protocol overhead from marshaling and unmarshaling, session
 maintenance, encryption and decryption, and more; @dma overhead from the need
@@ -160,13 +160,13 @@ Shinjuku~@kaffes_shinjuku_2019, Caladan~@fried_caladan_2020, and
 DemiKernel~@zhang_demikernel_2021 improves tail latency by dedicating CPU cores
 to polling @nic contexts with various kernel-bypass mechanisms to improve
 efficiency.  More recently, Wave~@humphries_wave_2024 explores offloading
-scheduling policies to dedicated, smart #[@nic]-like #glspl("ipu") while
-maintaining low latency for dispatching with @pio mechanisms.
+scheduling policies to dedicated, smart #[@nic]-like @ipu[s] while maintaining
+low latency for dispatching with @pio mechanisms.
 
-Buffer management is an important topic for offloading @rpc to smart
-#glspl("nic").  Zerializer~@wolnikowski_zerializer_2021 passes memory _arenas_
-between the @nic and CPU containing @rpc objects to achieve zero-copy
-serialization and deserialization; the protocol buffers accelerator from
+Buffer management is an important topic for offloading @rpc to smart @nic[s].
+Zerializer~@wolnikowski_zerializer_2021 passes memory _arenas_ between the @nic
+and CPU containing @rpc objects to achieve zero-copy serialization and
+deserialization; the protocol buffers accelerator from
 Berkeley~@karandikar_hardware_2021 adopts a similar approach.  We might be able
 to explore further in this field with customized cache line-level protocols on
 cache-coherent interconnects.
