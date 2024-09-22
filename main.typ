@@ -91,7 +91,7 @@ advantage of cache-coherent interconnects.  We will build a cache-coherent
 offloading smart @nic to free the CPU cores that run @rpc service handlers from
 all overheads due to network and protocol processing.  The @nic would be
 tightly integrated with various aspects of the OS, such as task scheduling and
-memory management.  Since most @rpc protocols are designed to be processed on
+buffer management.  Since most @rpc protocols are designed to be processed on
 the CPU, we also need to explore what type of network protocols are suitable
 for efficient implementation in hardware.  For a successful solution with
 real-world impact, we also tackle important concerns for production
@@ -104,6 +104,9 @@ system.
 #pagebreak(weak: true)
 
 == Current State of Research in the Field #lim[ca 2-3 page]
+
+#todo[general recipe: describe work, contrast what we do to that work, *explain
+how we (would) improve*]
 
 === Cache Coherence Interconnects
 
@@ -124,7 +127,7 @@ proprietary.  As a result from various restrictions in existing protocols,
 research on cache-coherent interconnects are largely performed on experimental
 systems like Intel HARP and Enzian~@cock_enzian_2022.
 
-=== Communication Pattern
+=== Communication Pattern between CPU and @nic
 
 The communication pattern between CPU and peripheral device has been
 extensively studied.  Previous works such as hXDP and kPIO+WC have shown the
@@ -149,13 +152,24 @@ This observation coincides with findings from a recent study from
 Google~@seemakhupt_cloud-scale_2023, which highlights the importance of
 efficient small transfers in datacenter @rpc due to their high frequency.
 
-#todo[Cohort?]
+=== Integration with OS Facilities
 
-=== Integration with OS
+Improving scheduling latency and efficiency of networking tasks is a topic
+extensively explored by previous work.  Previous works like
+Shinjuku~@kaffes_shinjuku_2019, Caladan~@fried_caladan_2020, and
+DemiKernel~@zhang_demikernel_2021 improves tail latency by dedicating CPU cores
+to polling @nic contexts with various kernel-bypass mechanisms to improve
+efficiency.  More recently, Wave~@humphries_wave_2024 explores offloading
+scheduling policies to dedicated, smart #[@nic]-like #glspl("ipu") while
+maintaining low latency for dispatching with @pio mechanisms.
 
-#todo[thread/task scheduling; memory management
-
-papers: Shinjuku, Shenango, Caladan, Demikernel, Wave]
+Buffer management is an important topic for offloading @rpc to smart
+#glspl("nic").  Zerializer~@wolnikowski_zerializer_2021 passes memory _arenas_
+between the @nic and CPU containing @rpc objects to achieve zero-copy
+serialization and deserialization; the protocol buffers accelerator from
+Berkeley~@karandikar_hardware_2021 adopts a similar approach.  We might be able
+to explore further in this field with customized cache line-level protocols on
+cache-coherent interconnects.
 
 === Telemetry and Instrumentation
 
@@ -241,7 +255,7 @@ Work item description
 #work-package([Integrated task scheduling], [3 months]) <scheduling>
 Work item description
 
-#work-package([Integrated memory management], [3 months])
+#work-package([Integrated buffer management], [3 months])
 Work item description
 
 === Deployability
