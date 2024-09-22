@@ -152,7 +152,7 @@ This observation coincides with findings from a recent study from
 Google~@seemakhupt_cloud-scale_2023, which highlights the importance of
 efficient small transfers in datacenter @rpc due to their high frequency.
 
-=== Integration with OS Facilities
+=== Integration with OS
 
 Improving scheduling latency and efficiency of networking tasks is a topic
 extensively explored by previous work.  Previous works like
@@ -171,11 +171,22 @@ Berkeley~@karandikar_hardware_2021 adopts a similar approach.  We might be able
 to explore further in this field with customized cache line-level protocols on
 cache-coherent interconnects.
 
-=== Telemetry and Instrumentation
+=== Deployability in Production Environments
 
-multi-tenancy and virtualization
+As of today, little attention is paid to multi-tenancy support for smart
+@nic[s], mainly due to most cloud providers deploying them as @ipu[s] for
+offloading work from the hypervisor host.  FairNIC~@grant_smartnic_2020
+discussed about performance isolation for the Cavium LiquidIO smart @nic.
+OSMOSIS~@khalilov_osmosis_2024 introduces a centralized hardware scheduler for
+processing units on the smart @nic to implement @sriov virtual functions for
+each tenant.  We believe that integration between the CPU and smart @nic with
+cache-coherent interconnects would pose new challenges for virtualization and
+multi-tenancy, since conventional PCIe #[@sriov]-style virtualization
+technologies would not apply naively.
 
-inspectability, robustness, accounting, debugging
+Telemetry, Instrumentation (debugging, accounting, etc.)
+
+fault tolerance/recovery: single point of failure?  how to fall back
 
 === Offload-friendly Network Protocol Design
 
