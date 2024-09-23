@@ -105,8 +105,8 @@ system.
 
 == Current State of Research in the Field #lim[ca 2-3 page]
 
-#todo[general recipe: describe work, contrast what we do to that work, *explain
-how we (would) improve*]
+We group prior works related to this thesis by topic and cite only the most
+relevant papers due to space limitation.
 
 === Cache Coherence Interconnects
 
@@ -125,7 +125,9 @@ embedded systems instead of server-scale hardware.  NVLink 2.0 from NVIDIA
 features cache coherence in high-performance hardware but is closed and
 proprietary.  As a result from various restrictions in existing protocols,
 research on cache-coherent interconnects are largely performed on experimental
-systems like Intel HARP and Enzian~@cock_enzian_2022.
+systems like Intel HARP and Enzian~@cock_enzian_2022.  We plan to implement our
+prototype systems on Enzian, but would also be open to adopt new CXL hardware
+suitable for our purposes as they become available.
 
 === Communication Pattern between CPU and @nic
 
@@ -133,15 +135,15 @@ The communication pattern between CPU and peripheral device has been
 extensively studied.  Previous works such as hXDP and kPIO+WC have shown the
 high overhead of PCIe @dma for smaller transactions and attempts to mitigate
 either by processing them solely on the CPU or using PCIe @pio for lower
-latency.
-
-Extra efficiency can be achieved with cache-coherent interconnects other than
-PCIe.  Dagger~@lazarev_dagger_2021 builds on the UPI/CCI-P implementation of
-Intel HARP an FPGA NIC for low-latency RPC, focusing mainly on using the UPI
-interconnect as a @nic interface to offload @rpc protocol processing.  Previous
-work in the group on @pio~@ruzhanskaia_rethinking_nodate showed that it is
-possible to achieve higher efficiency with @pio using cache-coherent
-interconnects.
+latency.  Extra efficiency can be achieved with cache-coherent interconnects
+other than PCIe.  Dagger~@lazarev_dagger_2021 builds on the UPI/CCI-P
+implementation of Intel HARP an FPGA NIC for low-latency RPC, focusing mainly
+on using the UPI interconnect as a @nic interface to offload @rpc protocol
+processing.  Previous work in the group on @pio~@ruzhanskaia_rethinking_nodate
+showed that it is possible to achieve higher efficiency with @pio using
+cache-coherent interconnects.  Our work builds on the basic @nic implementation
+in~@ruzhanskaia_rethinking_nodate for a full solution of offloading @rpc
+processing.
 
 Many works have since long discovered that a cache line is a better unit of
 transfer for workloads where small transfers are commonplace; notable examples
@@ -150,7 +152,9 @@ Concord~@iyer_achieving_2023 are more recent examples of employing this idea
 for low-latency scheduling via one polled cache line between the CPU and @nic.
 This observation coincides with findings from a recent study from
 Google~@seemakhupt_cloud-scale_2023, which highlights the importance of
-efficient small transfers in datacenter @rpc due to their high frequency.
+efficient small, _sub-#{sym.mu}s_ transfers in datacenter @rpc due to their
+high frequency.  In this thesis, we target these small transfers to improve
+efficiency for a common case of datacenter communication.
 
 === Integration with OS
 
@@ -161,15 +165,18 @@ DemiKernel~@zhang_demikernel_2021 improves tail latency by dedicating CPU cores
 to polling @nic contexts with various kernel-bypass mechanisms to improve
 efficiency.  More recently, Wave~@humphries_wave_2024 explores offloading
 scheduling policies to dedicated, smart #[@nic]-like @ipu[s] while maintaining
-low latency for dispatching with @pio mechanisms.
+low latency for dispatching with @pio mechanisms.   We believe that with
+techniques like lazy update thanks to cache-coherent interconnects, we can
+manipulate internal states of existing OS schedulers and achieve more efficient
+and ergonomic integration.
 
 Buffer management is an important topic for offloading @rpc to smart @nic[s].
-Zerializer~@wolnikowski_zerializer_2021 passes memory _arenas_ between the @nic
-and CPU containing @rpc objects to achieve zero-copy serialization and
-deserialization; the protocol buffers accelerator from
-Berkeley~@karandikar_hardware_2021 adopts a similar approach.  We might be able
-to explore further in this field with customized cache line-level protocols on
-cache-coherent interconnects.
+Zerializer~@wolnikowski_zerializer_2021 passes memory _arenas_ containing @rpc
+objects between the @nic and CPU over PCIe to achieve zero-copy serialization
+and deserialization; ProtoAcc~@karandikar_hardware_2021 from Berkeley adopts a
+similar approach over a tightly-coupled coprocessor interface.  We might be
+able to explore further in this field with customized cache line-level
+protocols on cache-coherent interconnects.
 
 === Deployability in Production Environments
 
@@ -177,14 +184,24 @@ As of today, little attention is paid to multi-tenancy support for smart
 @nic[s], mainly due to most cloud providers deploying them as @ipu[s] for
 offloading work from the hypervisor host.  FairNIC~@grant_smartnic_2020
 discussed about performance isolation for the Cavium LiquidIO smart @nic.
-OSMOSIS~@khalilov_osmosis_2024 introduces a centralized hardware scheduler for
+#box[OSMOSIS]~@khalilov_osmosis_2024 introduces a centralized hardware scheduler for
 processing units on the smart @nic to implement @sriov virtual functions for
 each tenant.  We believe that integration between the CPU and smart @nic with
 cache-coherent interconnects would pose new challenges for virtualization and
 multi-tenancy, since conventional PCIe #[@sriov]-style virtualization
-technologies would not apply naively.
+technologies would not apply naively here.
 
-Telemetry, Instrumentation (debugging, accounting, etc.)
+Telemetry data is crucial for analyzing performance and efficiency issues for
+complex distributed systems in datacenters.  Dapper~@sigelman_dapper_2010 from
+Google is a distributed tracing platform for monitoring various metrics like
+@rpc tail latency, network usage, etc.  Fathom~@qureshi_fathom_2023 further
+integrates with Dapper, providing low-level network stack instrumentation for
+all connections in Google datacenters.  The ubiquity of tracing and
+instrumentation needs in production datacenters forms a stark contrast against
+many research prototype systems that treat tracing as _exceptions_ rather than
+_norm_: disregarding traced endpoints by excluding them from the fast path
+limits the deployability of these systems.  We intend to invest in this
+direction to allow our system to be deployable in production environments.
 
 fault tolerance/recovery: single point of failure?  how to fall back
 
