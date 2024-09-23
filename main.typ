@@ -332,10 +332,25 @@ prove the higher-level correctness property.
 
 == Progress to Date #lim[ca #half page]
 
-Mention previous work:
-- FPsPIN work
-- demo ECI @nic for PIO paper
-- work in progress for simple @rpc offloading @nic (decode pipeline, etc.)
+The doctoral student has previously finished his master thesis on porting the
+PsPIN smart @nic platform to @fpga[s].  FPsPIN~@schneider_fpspin_2024 combines
+the Corundum @fpga @nic platform with PsPIN to create a prototype Ethernet
+smartNIC.  This work helped him acquire necessary skills for @fpga development
+and in building Ethernet-based smart @nic[s].
+
+The doctoral student has partaken in building a prototype @pio @nic for the
+@pio paper~@ruzhanskaia_rethinking_2024 using SpinalHDL, a hardware description
+language embedded in Scala.  The basic @nic prototype passes raw Ethernet
+frames between a CPU core and the @fpga attached over ECI using a variant of
+the 2Fast2Forward protocol.  It serves as a proof-of-concept for
+message-passing between CPU and device, as well as the foundation for the @rpc
+smart @nic prototype as we discussed in @goals-prototype.
+
+The doctoral student has finished a basic smart @nic that can offload
+unmarshaling of @oncrpc requests based on the @pio @nic prototype.  Further
+supplied with the @rpc encoding pipeline, this @nic will be able to demonstrate
+offloading of #[@oncrpc]-based applications like NFS.  The rest of the
+prototype system builds upon this preliminary demo.
 
 == Detailed Work Plan #lim[ca 1 page] <work-pkgs>
 
