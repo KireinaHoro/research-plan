@@ -39,13 +39,13 @@ communication through a co-design of hardware and operating system, utilizing
 emerging cache-coherent interconnect standards between CPUs and custom-built
 #glspl("nic", long: false).  We focus on three main aspects for building a
 successful solution: efficiency, deployability, and provable security.  We
-pursue high efficieny by building a cache-coherent smart @nic[s] with
-protocol offloading capabilities, aiming to eliminate all existing
-communication overheads.  We ensure deployability by designing our software and
-hardware with attention to requirements in production environments, such as
-multi-tenancy, inspection and telemetry, and debugging.  We target provable
-security by formally verifying critical software and hardware components
-introduced, as well as how they interact with existing components.
+pursue high efficieny by building a cache-coherent smart @nic[s] with protocol
+offloading capabilities, aiming to eliminate all existing communication
+overheads.  We ensure deployability by designing our software and hardware with
+attention to requirements in production environments, such as multi-tenancy,
+inspection and telemetry, and debugging.  We target provable security by
+formally verifying critical software and hardware components introduced, as
+well as how they interact with existing components.
 
 #pagebreak(weak: true)
 
@@ -98,8 +98,8 @@ real-world impact, we also tackle important concerns for production
 environments such as multi-tenancy, inspectability, and accounting.  As we
 integrate deeply and fundamentally with the OS, security is of utmost
 importance; we plan to employ various formal methods approaches to verify the
-correctness of critical components and how they interact with the rest of the
-system.
+functional correctness and isolation properties of critical components and how
+they interact with the rest of the system.
 
 #pagebreak(weak: true)
 
@@ -152,9 +152,13 @@ Concord~@iyer_achieving_2023 are more recent examples of employing this idea
 for low-latency scheduling via one polled cache line between the CPU and @nic.
 This observation coincides with findings from a recent study from
 Google~@seemakhupt_cloud-scale_2023, which highlights the importance of
-efficient small, _sub-#{sym.mu}s_ transfers in datacenter @rpc due to their
+efficient small, #{sym.mu}s-scale transfers in datacenter @rpc due to their
 high frequency.  In this thesis, we target these small transfers to improve
 efficiency for a common case of datacenter communication.
+
+=== Offload-friendly Network Protocol Design
+
+#todo[what are the related works in this field?]
 
 === Integration with OS
 
@@ -184,12 +188,14 @@ As of today, little attention is paid to multi-tenancy support for smart
 @nic[s], mainly due to most cloud providers deploying them as @ipu[s] for
 offloading work from the hypervisor host.  FairNIC~@grant_smartnic_2020
 discussed about performance isolation for the Cavium LiquidIO smart @nic.
-#box[OSMOSIS]~@khalilov_osmosis_2024 introduces a centralized hardware scheduler for
-processing units on the smart @nic to implement @sriov virtual functions for
-each tenant.  We believe that integration between the CPU and smart @nic with
-cache-coherent interconnects would pose new challenges for virtualization and
-multi-tenancy, since conventional PCIe #[@sriov]-style virtualization
-technologies would not apply naively here.
+#box[OSMOSIS]~@khalilov_osmosis_2024 introduces a centralized hardware
+scheduler for multiplexing processing units on the smart @nic across multiple
+@sriov virtual functions.  S-NIC~@zhou_smartnic_2024 focuses on security
+isolation between network functions on smart @nic[s] through virtualization of
+data plane and accelerators.  We believe that integration between the CPU and
+smart @nic with cache-coherent interconnects would pose new challenges for
+virtualization and multi-tenancy, since conventional PCIe #[@sriov]-style
+virtualization technologies would not apply naively here.
 
 Telemetry data is crucial for analyzing performance and efficiency issues for
 complex distributed systems in datacenters.  Dapper~@sigelman_dapper_2010 from
@@ -203,13 +209,20 @@ _norm_: disregarding traced endpoints by excluding them from the fast path
 limits the deployability of these systems.  We intend to invest in this
 direction to allow our system to be deployable in production environments.
 
-fault tolerance/recovery: single point of failure?  how to fall back
-
-=== Offload-friendly Network Protocol Design
-
 === Security and Verification
 
-formal verification of hardware
+#[@rpc]-offloading smart @nic[s] are a potential new single point of failure
+introduced to datacenter systems; the critical nature warrants extensive
+verification effort for their functional correctness.  Conventional hardware
+verification focuses on @abv against properties specified in various logic
+domains.  These properties can be either written by hand or generated from
+higher-level behavioural models of the final system.  They can then be checked
+in an automated fashion with simulation or formal methods.  We plan to
+integrate with prior models developed in the group for cache-coherent
+interconnects to derive properties and employ standard techniques to prove the
+functional correctness of our custom hardware.
+
+#todo[side-channel freedom (isolation guarantees)?  InSpectre (CCS'20)]
 
 == Goals of the Thesis #lim[ca 2-3 pages] <goals>
 
@@ -230,7 +243,7 @@ environments as we explain in @goals-deployability.  Finally, we explore how we
 can prove that the resulting system is secure and reliable with formal methods
 in @goals-security.
 
-=== Prototype System <goals-prototype>
+=== Base System <goals-prototype>
 
 In our ongoing project, Enzian Fast @rpc, we propose an accelerated
 communication architecture that fuses the @nic and the OS with coherently
@@ -272,7 +285,7 @@ Mention previous work:
 We list out the exact work packages for each critical aspect of concern, as we
 have previously detailed in #link(<goals>)[Goals of the Thesis].
 
-=== Prototype System
+=== Base System
 
 #work-package([Basic @rpc @nic], [3 months]) <basic-nic>
 Work item description

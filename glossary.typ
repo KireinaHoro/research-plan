@@ -8,4 +8,5 @@
   (key: "pio", short: [PIO], long: [programmed input/output]),
   (key: "ipu", short: [IPU], long: [infrastructure processing unit]),
   (key: "sriov", short: [SR-IOV], long: [single-root input/output virtualization]),
+  (key: "abv", short: [ABV], long: [assertion-based verification]),
 )
