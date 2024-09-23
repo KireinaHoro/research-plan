@@ -107,8 +107,8 @@
 
   #{
     // XXX: redefining numbering affects @ syntax
-    show heading.where(level: 2): set heading(numbering: (_, lvl) => [Part #lvl #h(1em)])
-    show heading.where(level: 3): set heading(numbering: (_, _, lvl) => [#lvl. #h(1em)])
+    show heading.where(level: 2): set heading(numbering: (_, lvl) => [Part #lvl #h(.5em)])
+    show heading.where(level: 3): set heading(numbering: (_, _, lvl) => [#lvl. #h(.5em)])
 
     // show rules for work packages
     show figure.where(kind: "work-package"): it => [
