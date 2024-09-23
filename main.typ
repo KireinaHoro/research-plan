@@ -157,7 +157,7 @@ efficient small, #{sym.mu}s-scale transfers in datacenter @rpc due to their
 high frequency.  In this thesis, we target these small transfers to improve
 efficiency for a common case of datacenter communication.
 
-=== Offload-friendly Network Protocol Design
+=== Offload-friendly Network Protocol Design <related-work-proto-design>
 
 #todo[what are the related works in this field?]
 
@@ -185,6 +185,18 @@ protocols on cache-coherent interconnects.
 
 === Deployability in Production Environments
 
+Telemetry data is crucial for analyzing performance and efficiency issues for
+complex distributed systems in datacenters.  Dapper~@sigelman_dapper_2010 from
+Google is a distributed tracing platform for monitoring various metrics like
+@rpc tail latency, network usage, etc.  Fathom~@qureshi_fathom_2023 further
+integrates with Dapper, providing low-level network stack instrumentation for
+all connections in Google datacenters.  The ubiquity of tracing and
+instrumentation needs in production datacenters forms a stark contrast against
+many research prototype systems that treat tracing as _exceptions_ rather than
+_norm_: disregarding traced endpoints by excluding them from the fast path
+limits the deployability of these systems.  We intend to invest in this
+direction to allow our system to be deployable in production environments.
+
 As of today, little attention is paid to multi-tenancy support for smart
 @nic[s], mainly due to most cloud providers deploying them as @ipu[s] for
 offloading work from the hypervisor host.  FairNIC~@grant_smartnic_2020
@@ -197,18 +209,6 @@ data plane and accelerators.  We believe that integration between the CPU and
 smart @nic with cache-coherent interconnects would pose new challenges for
 virtualization and multi-tenancy, since conventional PCIe #[@sriov]-style
 virtualization technologies would not apply naively here.
-
-Telemetry data is crucial for analyzing performance and efficiency issues for
-complex distributed systems in datacenters.  Dapper~@sigelman_dapper_2010 from
-Google is a distributed tracing platform for monitoring various metrics like
-@rpc tail latency, network usage, etc.  Fathom~@qureshi_fathom_2023 further
-integrates with Dapper, providing low-level network stack instrumentation for
-all connections in Google datacenters.  The ubiquity of tracing and
-instrumentation needs in production datacenters forms a stark contrast against
-many research prototype systems that treat tracing as _exceptions_ rather than
-_norm_: disregarding traced endpoints by excluding them from the fast path
-limits the deployability of these systems.  We intend to invest in this
-direction to allow our system to be deployable in production environments.
 
 === Security and Verification
 
@@ -295,10 +295,43 @@ thus making a promising case for our latency target.
 
 === Deployability <goals-deployability>
 
+The smart @nic we build needs to allow telemetry collection to help identify
+possible performance bottlenecks and efficiency issues.  Implemented hardware
+on @fpga[s] are not as easily instrumented as software.  We implement flexible
+and customizable event counters for every part of the packet processing
+pipeline, which would allow a detailed break-down of latency introduced by the
+smart @nic.  We design interfaces for configurable transaction-level tracing to
+allow higher-level analysis, profiling and debugging of the application.  We
+plan to build tooling to allow us to analyze various sources of telemetry data
+and provide the same level of insight as in production environments.  This will
+involve working with our industry partners to figure out the exact requirements
+real production environments have.
+
+Effective multi-tenancy support requires _multiplexing_ of processing elements
+as well as proper _performance isolation_ to avoid unwanted interference and
+fairness issues between tenants on the same smart @nic.  We need to define
+clear interfaces between the @rpc application and the software runtime to allow
+for clean isolation.  Once we attain the prototype system as described in
+@goals-prototype, we need to implement on top virtualization mechanisms to
+multiplex packet processing pipelines and on-chip memory.  We also need to
+figure out scheduling policies to ensure fairness among tenants.  We have to in
+addition enforce performance isolation for traffic from different tenants on
+the same coherent interconnect; many open questions exist here.
+
 === Security <goals-security>
 
-#todo[mention aspects of the system that needs attention: basic functionality,
-scheduling optimization, mem mgmt, security/formal, multi-tenancy]
+Security problems are also deployability problems: smart @nic[s] sit at the
+choke point between a server and the network, warranting high assurance in
+order to be deployed large scale.  First and foremost we need to verify that
+the smart @nic's _functional correctness_.  We first need to specify what is
+the correct behaviour of the smart @nic and OS formally, by defining
+_contracts_ for each part of the system.  For each component, we have to prove
+that it upholds the assigned contract for the given interface: we verify
+hardware components with @abv and software components with program verifiers.
+We can then compose all components, abstract away implementation details, and
+prove the higher-level correctness property.
+
+#todo[side-channel freedom?]
 
 == Progress to Date #lim[ca $frac(1, 2)$ page]
 
@@ -318,7 +351,9 @@ have previously detailed in #link(<goals>)[Goals of the Thesis].
 Work item description
 
 #work-package([Protocol design for HW offloading], [3 months])
-Work item description
+
+#todo[remove this work package? otherwise, find proper related work in
+@related-work-proto-design]
 
 #work-package([Integrated task scheduling], [3 months]) <scheduling>
 Work item description
