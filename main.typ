@@ -49,7 +49,7 @@ well as how they interact with existing components.
 
 #pagebreak(weak: true)
 
-== Introduction #lim[ca 1 page]
+== Introduction #lim[ca 1 page] <intro>
 
 Virtually all workloads running in datacenters require communication with other
 systems in some way; one of the most commonly used paradigms for such is @rpc.
@@ -60,12 +60,12 @@ demonstrated that short @rpc invocations in the ballpark of 1 us make up a
 significant portion of all @rpc workloads.
 
 Despite the high frequency of short @rpc workloads, traditional datacenter @rpc
-architecture using PCIe @dma @nic[s] incur high latency and CPU overhead.
-We identify three classes of overhead in the traditional PCIe @dma @rpc
-architecture: protocol overhead from marshaling and unmarshaling, session
-maintenance, encryption and decryption, and more; @dma overhead from the need
-to set up descriptor rings, various queues, and @dma buffers; and schedule
-overhead from the need to multiplex CPU cores between normal workload and
+architecture using PCIe @dma @nic[s] incur high latency and CPU overhead.  We
+identify three classes of overhead in the traditional PCIe @dma @rpc
+architecture: _protocol overhead_ from marshaling and unmarshaling, session
+maintenance, encryption and decryption, and more; _@dma overhead_ from the need
+to set up descriptor rings, various queues, and @dma buffers; and _schedule
+overhead_ from the need to multiplex CPU cores between normal workload and
 handling events from the @nic via @irq, and to deliver packet data to the
 correct user space application.  All these overheads come on top of the actual
 CPU cycles spent executing the actual @rpc handler.  Many of these overheads
@@ -105,8 +105,9 @@ they interact with the rest of the system.
 
 == Current State of Research in the Field #lim[ca 2-3 page]
 
-We group prior works related to this thesis by topic and cite only the most
-relevant papers due to space limitation.
+We group prior works related to this thesis by topic and explain our vision on
+improving the status quo.  We cite only the most relevant papers due to space
+limitation.
 
 === Cache Coherence Interconnects
 
@@ -137,13 +138,13 @@ high overhead of PCIe @dma for smaller transactions and attempts to mitigate
 either by processing them solely on the CPU or using PCIe @pio for lower
 latency.  Extra efficiency can be achieved with cache-coherent interconnects
 other than PCIe.  Dagger~@lazarev_dagger_2021 builds on the UPI/CCI-P
-implementation of Intel HARP an FPGA NIC for low-latency RPC, focusing mainly
-on using the UPI interconnect as a @nic interface to offload @rpc protocol
-processing.  Previous work in the group on @pio~@ruzhanskaia_rethinking_nodate
-showed that it is possible to achieve higher efficiency with @pio using
-cache-coherent interconnects.  Our work builds on the basic @nic implementation
-in~@ruzhanskaia_rethinking_nodate for a full solution of offloading @rpc
-processing.
+implementation of Intel HARP an @fpga @nic for low-latency @rpc, focusing
+mainly on using the UPI interconnect as a @nic interface to offload @rpc
+protocol processing.  Previous work in the group on
+@pio~@ruzhanskaia_rethinking_2024 showed that it is possible to achieve higher
+efficiency with @pio using cache-coherent interconnects.  Our work builds on
+the basic @nic implementation in~@ruzhanskaia_rethinking_2024 for a full
+solution of offloading @rpc processing.
 
 Many works have since long discovered that a cache line is a better unit of
 transfer for workloads where small transfers are commonplace; notable examples
@@ -165,7 +166,7 @@ efficiency for a common case of datacenter communication.
 Improving scheduling latency and efficiency of networking tasks is a topic
 extensively explored by previous work.  Previous works like
 Shinjuku~@kaffes_shinjuku_2019, Caladan~@fried_caladan_2020, and
-DemiKernel~@zhang_demikernel_2021 improves tail latency by dedicating CPU cores
+DemiKernel~@zhang_demikernel_2021 improve tail latency by dedicating CPU cores
 to polling @nic contexts with various kernel-bypass mechanisms to improve
 efficiency.  More recently, Wave~@humphries_wave_2024 explores offloading
 scheduling policies to dedicated, smart #[@nic]-like @ipu[s] while maintaining
@@ -227,9 +228,11 @@ functional correctness of our custom hardware.
 == Goals of the Thesis #lim[ca 2-3 pages] <goals>
 
 #show ref: it => {
-  let t = query(it.target).first()
-  if not is-glossary(it.target) and t.numbering == none {
-    link(it.target, t.body)
+  if not is-glossary(it.target) {
+    let t = query(it.target).first()
+    if t.numbering == none {
+      link(it.target, emph(t.body))
+    } else { it }
   } else {
     it
   }
