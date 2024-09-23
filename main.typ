@@ -17,6 +17,7 @@
 
 #let show-page-limits = true
 #let lim(len) = if show-page-limits { text(blue)[(#len)] }
+#let half = [\u{00bd}]
 
 // replace microsecond with greek letter
 #let us_rgx = regex("(\d) us\b")
@@ -24,7 +25,7 @@
 
 = Research Proposal
 
-== Abstract #lim[max $frac(1, 2)$ page]
+== Abstract #lim[max #half page]
 
 Datacenter communication patterns are becoming increasingly oriented towards
 smaller transactions with the recent trend of micro-services and serverless
@@ -223,8 +224,6 @@ integrate with prior models developed in the group for cache-coherent
 interconnects to derive properties and employ standard techniques to prove the
 functional correctness of our custom hardware.
 
-#todo[side-channel freedom (isolation guarantees)?  InSpectre (CCS'20)]
-
 == Goals of the Thesis #lim[ca 2-3 pages] <goals>
 
 #show ref: it => {
@@ -331,9 +330,7 @@ hardware components with @abv and software components with program verifiers.
 We can then compose all components, abstract away implementation details, and
 prove the higher-level correctness property.
 
-#todo[side-channel freedom?]
-
-== Progress to Date #lim[ca $frac(1, 2)$ page]
+== Progress to Date #lim[ca #half page]
 
 Mention previous work:
 - FPsPIN work
@@ -379,7 +376,7 @@ Work item description
 The basic @rpc @nic integrated with task scheduling (@basic-nic and @scheduling)
 should result in one paper in a systems top conference (e.g. ASPLOS, SOSP).
 
-== Time Schedule #lim[ca $frac(1, 2)$ page]
+== Time Schedule #lim[ca #half page]
 
 #todo[draw a Gantt diagram with the @work-pkgs defined above]
 
