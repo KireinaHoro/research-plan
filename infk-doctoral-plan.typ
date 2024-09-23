@@ -23,14 +23,14 @@
 ) = [
   // try to mimic the look and feel of the latex template
   #set text(
-    font: "New Computer Modern",
+    font: "Palatino",
     size: 11pt
   )
   #set par(
     leading: 0.55em,
     justify: true
   )
-  #show raw: set text(font: "New Computer Modern Mono")
+  #show raw: set text(font: "Inconsolata")
   #show par: set block(spacing: 0.55em, above: 1.4em)
   #show heading: set block(above: 1.4em, below: 1em)
 
