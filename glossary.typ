@@ -9,4 +9,6 @@
   (key: "ipu", short: [IPU], long: [infrastructure processing unit]),
   (key: "sriov", short: [SR-IOV], long: [single-root input/output virtualization]),
   (key: "abv", short: [ABV], long: [assertion-based verification]),
+  (key: "fpga", short: [FPGA], long: [field-programmable gate array]),
+  (key: "oncrpc", short: [ONC-RPC], long: [Open Network Computing Remote Procedure Call]),
 )

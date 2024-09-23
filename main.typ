@@ -240,34 +240,58 @@ functional correctness of our custom hardware.
 
 First and foremost, we need a base prototype system to demonstrate the
 feasibility of our approach to higher efficiency; we explain this in
-@goals-prototype.  After attaining the prototype, we then tackle various real
-world problems that affect deployability of our solutions in production
-environments as we explain in @goals-deployability.  Finally, we explore how we
-can prove that the resulting system is secure and reliable with formal methods
-in @goals-security.
+@goals-prototype.  After attaining the prototype, we then have to tackle
+various real world problems that would allow adoption of our solutions in
+production environments; we explain how we achieve this in
+@goals-deployability.  Finally, we explore how we can prove that the resulting
+system is secure and reliable with formal methods in @goals-security.
 
 === Base System <goals-prototype>
 
-In our ongoing project, Enzian Fast @rpc, we propose an accelerated
-communication architecture that fuses the @nic and the OS with coherently
-attached FPGA, effectively freeing the CPU from all overheads in @rpc processing
-to achieve high efficiency and performance.
+The goal of the base prototype @rpc offloading system is to remove *all*
+overheads in @rpc processing from the host CPU cores.  We use latency as a
+_proxy_ of efficiency: the lower latency we are able to achieve, the higher
+efficiency we will attain.  Our system fuses the @nic and the OS with a smart
+@nic implemented on a coherently-attached @fpga to eliminate the three main
+types of overhead in conventional @rpc processing: _protocol overhead_, _@dma
+overhead_, and _schedule overhead_.
 
-To tackle the aforementioned protocol overhead, we offload @rpc protocol
-processing operations such as compression, encryption, and arguments marshaling
-to the FPGA as hardware accelerators.  We alleviate @dma overheads by
-implementing the 2Fast2Forward message-passing protocol based on programmable
-I/O (PIO) on top of cache-coherence protocols like CXL.  In addition, we make
-use of the latency and CPU cycles advantage from the cache-coherence protocol
-and deeply integrate the OS and the smart @nic, allowing the @nic to schedule @rpc
-requests to be handled on a specific core.  The CPU core would load a cacheline
-from the smart @nic containing all necessary information to start executing the
-@rpc workload directly and eliminating schedule overhead.
+To tackle _protocol overhead_, we offload @rpc protocol processing operations
+such as encryption/decryption, compression/decompression, and arguments
+marshaling/unmarshaling to the @fpga as hardware accelerators.  We start with a
+very simple protocol, @oncrpc based on UDP, which is easy to implement in
+hardware but still have popular applications built with it, like NFS.  We can
+make use of EasyNet, the HLS TCP accelerator developed in the group, to
+implement more complex @rpc protocols.  Encryption and compression are
+orthogonal to the serialization format, and off-the-shelf implementations of
+common cryptography and compression IP cores allow quick integration into our
+prototype system.
 
-We set an ambitious target for end-to-end @rpc latency of 1 us.
-Preliminary results on Enzian [2] show that we can send and receive Ethernet
-frames from the CPU over the ECI cache coherence protocol in around 800
-nanoseconds, making a promising case for our latency target.
+We alleviate _@dma overheads_ by implementing the 2Fast2Forward message-passing
+protocol as discussed in our @pio paper~@ruzhanskaia_rethinking_2024 on top of
+ECI, the cache-coherence protocol in Enzian.  Specifically, the CPU core polls
+in userspace on a pair of special control cache lines backed by @fpga memory
+for receiving packets.  The @fpga blocks reload requests for these cache lines
+until a packet arrives, or a specific timeout occurs.  This removes the
+overhead of setting up @dma descriptors and @irq for transfers between the CPU
+and the @nic.  Kernel bypass from userspace mitigates the overhead of
+traversing many queues and protection boundaries.
+
+We make use of the latency and CPU cycles advantage from the cache-coherence
+protocol to deeply integrate the OS and the smart @nic and free the CPU from
+any _scheduling overhead_.  This allows the smart @nic to make scheduling
+decisions on where to steer the packet: by placing related context of the OS
+scheduler on @fpga memory, the smart @nic receives on-demand updates whenever a
+core changes state.  The smart @nic can also dispatch @rpc requests to be
+handled on a specific core: the CPU core would load a cache line from the
+smart @nic containing all necessary information to start executing the @rpc
+workload directly, including pointers to @rpc handler code, data, unmarshaled
+arguments, and protection domain information.
+
+We set an ambitious target for end-to-end @rpc latency of *1 us*.  Preliminary
+results~@ruzhanskaia_rethinking_2024 show that we can send and receive Ethernet
+frames from the CPU over the ECI cache coherence protocol in around 800 ns,
+thus making a promising case for our latency target.
 
 === Deployability <goals-deployability>
 
