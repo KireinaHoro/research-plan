@@ -12,6 +12,13 @@
   }
 }
 
+#let is-glossary(it) = {
+  if type(it) == label {
+    let prev-heading = query(heading.where(level: 3).before(it)).last()
+    to-string(prev-heading).match("Glossary") != none
+  } else { false }
+}
+
 #let document(
   student-name: [Happy Student],
   student-number: [00-000-000],
@@ -36,13 +43,11 @@
 
   // make links visible (do not highlight glossary labels)
   #show link: it => {
-    let boxed = box(stroke: aqua, it)
-    if type(it.dest) == label {
-      let prev-heading = query(heading.where(level: 3).before(it.dest)).last()
-      if to-string(prev-heading).match("Glossary") != none {
-        it
-      } else { boxed }
-    } else { boxed }
+    if is-glossary(it.dest) {
+      it
+    } else {
+      box(stroke: aqua, it)
+    }
   }
   #show ref: box.with(stroke: lime)
 

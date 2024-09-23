@@ -1,4 +1,4 @@
-#import "infk-doctoral-plan.typ": document, todo, work-package
+#import "infk-doctoral-plan.typ": document, todo, work-package, is-glossary
 #show: document.with(
   student-name: [Pengcheng Xu],
   student-number: [21-951-876],
@@ -228,7 +228,7 @@ functional correctness of our custom hardware.
 
 #show ref: it => {
   let t = query(it.target).first()
-  if t.numbering == none {
+  if not is-glossary(it.target) and t.numbering == none {
     link(it.target, t.body)
   } else {
     it
