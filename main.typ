@@ -216,13 +216,21 @@ virtualization technologies would not apply naively here.
 #[@rpc]-offloading smart @nic[s] are a potential new single point of failure
 introduced to datacenter systems; the critical nature warrants extensive
 verification effort for their functional correctness.  Conventional hardware
-verification focuses on @abv against properties specified in various logic
-domains.  These properties can be either written by hand or generated from
-higher-level behavioural models of the final system.  They can then be checked
-in an automated fashion with simulation or formal methods.  We plan to
-integrate with prior models developed in the group for cache-coherent
-interconnects to derive properties and employ standard techniques to prove the
-functional correctness of our custom hardware.
+verification focuses on @abv~@witharana_survey_2022 against properties
+specified in various logic domains.  These properties can be either written by
+hand or generated from higher-level behavioural models of the final system.
+They can then be checked in an automated fashion with simulation or formal
+methods.  We plan to integrate with prior models developed in the group for
+cache-coherent interconnects to derive properties and employ standard
+techniques to prove the functional correctness of our custom hardware.
+
+_Specification synthesis_ is a method to extract behavioural specifications
+from a black-box component.  Schult et.~al.~@schuh_cc-nic_2024 proposed a method to
+test cache-coherence protocol hardware implementations with partial
+specifications.  Their method can be extended to synthesize full specifications
+for model-checking other components in a fully integrated system.  We will work
+closely with the authors towards deriving specifications for all hardware
+components in the system.
 
 == Goals of the Thesis #lim[ca 2-3 pages] <goals>
 
@@ -317,6 +325,13 @@ figure out scheduling policies to ensure fairness among tenants.  We have to in
 addition enforce performance isolation for traffic from different tenants on
 the same coherent interconnect; many open questions exist here.
 
+Apart from evaluating our system with synthetic benchmarks, we plan to show
+deployability of the system by porting existing workloads onto it.  Dandelion
+is a serverless scheduler and runtime developed in the group; the project would
+benefit from an offloaded @rpc smart @nic for implementing communication
+between worker nodes.  We plan to work with their team such that the
+communication subsystems in Dandelion is built on our system.
+
 === Security <goals-security>
 
 Security problems are also deployability problems: smart @nic[s] sit at the
@@ -324,11 +339,16 @@ choke point between a server and the network, warranting high assurance in
 order to be deployed large scale.  First and foremost we need to verify that
 the smart @nic's _functional correctness_.  We first need to specify what is
 the correct behaviour of the smart @nic and OS formally, by defining
-_contracts_ for each part of the system.  For each component, we have to prove
-that it upholds the assigned contract for the given interface: we verify
-hardware components with @abv and software components with program verifiers.
-We can then compose all components, abstract away implementation details, and
-prove the higher-level correctness property.
+_contracts_ for each part of the system.  Some of these contracts can be
+automatically derived from protocols imposed by existing components of the
+system, for example a model of the cache-coherence protocol.  We will also need
+to specify some parts of the system by hand.
+
+After acquiring specifications for each component, we then have to prove that
+the implementation upholds the formal contract.  We verify hardware components
+with various @abv techniques and software components with program verifiers.
+We can then compose all specifications of components, abstract away
+implementation details, and prove the higher-level correctness property.
 
 == Progress to Date #lim[ca #half page]
 
