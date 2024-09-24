@@ -67,7 +67,7 @@ architecture: _protocol overhead_ from marshaling and unmarshaling, session
 maintenance, encryption and decryption, and more; _@dma overhead_ from the need
 to set up descriptor rings, various queues, and @dma buffers; and _schedule
 overhead_ from the need to multiplex CPU cores between normal workload and
-handling events from the @nic via @irq, and to deliver packet data to the
+handling events from the @nic via @irq[s], and to deliver packet data to the
 correct user space application.  All these overheads come on top of the actual
 CPU cycles spent executing the actual @rpc handler.  Many of these overheads
 are fixed, not scaling with the size of the request and response, meaning that
@@ -256,7 +256,7 @@ To tackle _protocol overhead_, we offload @rpc protocol processing operations
 such as encryption/decryption, compression/decompression, and arguments
 marshaling/unmarshaling to the @fpga as hardware accelerators.  We start with a
 very simple protocol, @oncrpc based on UDP, which is easy to implement in
-hardware but still have popular applications built with it, like NFS.  We can
+hardware but still have popular applications built with it, like @nfs.  We can
 make use of EasyNet, the HLS TCP accelerator developed in the group, to
 implement more complex @rpc protocols.  Encryption and compression are
 orthogonal to the serialization format, and off-the-shelf implementations of
