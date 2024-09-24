@@ -12,10 +12,13 @@
   }
 }
 
+#let prev-heading(it) = {
+  to-string(query(selector(heading).before(it)).last())
+}
+
 #let is-glossary(it) = {
   if type(it) == label {
-    let prev-heading = query(heading.where(level: 3).before(it)).last()
-    to-string(prev-heading).match("Glossary") != none
+    prev-heading(it).match("Glossary") != none
   } else { false }
 }
 
@@ -50,17 +53,18 @@
     }
   }
   #show ref: it => {
-    if not is-glossary(it.target) {
+    if query(it.target).len() != 0 {
       let t = query(it.target).first()
       // use name of section instead of number, unless it's a work package
       let is-wp = t.has("kind") and t.kind == "work-package"
       if t.numbering == none or not is-wp {
-        link(it.target, box(emph(t.body), stroke: lime))
+        link(it.target, emph(t.body))
       } else {
-        box(it, stroke: lime)
+        link(it.target, it)
       }
     } else {
-      it
+      // no target: must be a citation
+      box(stroke: lime, it)
     }
   }
 
