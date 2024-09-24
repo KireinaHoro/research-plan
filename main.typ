@@ -158,9 +158,11 @@ efficient small, #{sym.mu}s-scale transfers in datacenter @rpc due to their
 high frequency.  In this thesis, we target these small transfers to improve
 efficiency for a common case of datacenter communication.
 
+/*
 === Offload-friendly Network Protocol Design <related-work-proto-design>
 
 #todo[what are the related works in this field?]
+*/
 
 === Integration with OS
 
@@ -291,6 +293,17 @@ thus making a promising case for our latency target.
 
 === Deployability <goals-deployability>
 
+Apart from evaluating our system with synthetic benchmarks, we plan to show
+deployability of the system by porting existing workloads onto it.  Dandelion
+is a serverless scheduler and runtime developed in the group; the project would
+benefit from an offloaded @rpc smart @nic for implementing communication
+between worker nodes.  We plan to work with their team such that the
+communication subsystems in Dandelion is built on our system.
+DeathStarBench~@gan_open-source_2019 is the _de-facto_ standard for
+benchmarking micro-service systems and would a good candidate as well.  This
+process will expose practicality issues in our design and implementation,
+allowing us to further improve deployability for production systems.
+
 The smart @nic we build needs to allow telemetry collection to help identify
 possible performance bottlenecks and efficiency issues.  Implemented hardware
 on @fpga[s] are not as easily instrumented as software.  We implement flexible
@@ -314,13 +327,6 @@ figure out scheduling policies to ensure fairness among tenants.  We have to in
 addition enforce performance isolation for traffic from different tenants on
 the same coherent interconnect; many open questions exist here.
 
-Apart from evaluating our system with synthetic benchmarks, we plan to show
-deployability of the system by porting existing workloads onto it.  Dandelion
-is a serverless scheduler and runtime developed in the group; the project would
-benefit from an offloaded @rpc smart @nic for implementing communication
-between worker nodes.  We plan to work with their team such that the
-communication subsystems in Dandelion is built on our system.
-
 === Security <goals-security>
 
 Security problems are also deployability problems: smart @nic[s] sit at the
@@ -342,10 +348,11 @@ implementation details, and prove the higher-level correctness property.
 == Progress to Date #lim[ca #half page]
 
 The doctoral student has previously finished his master thesis on porting the
-PsPIN smart @nic platform to @fpga[s].  FPsPIN~@schneider_fpspin_2024 combines
-the Corundum @fpga @nic platform with PsPIN to create a prototype Ethernet
-smartNIC.  This work helped him acquire necessary skills for @fpga development
-and in building Ethernet-based smart @nic[s].
+PsPIN smart @nic platform to Xilinx @fpga[s], which are from the same vendor as
+@fpga[s] in Enzian.  FPsPIN~@schneider_fpspin_2024 combines the Corundum @fpga
+@nic platform with PsPIN to create a prototype Ethernet smartNIC.  This work
+helped him acquire necessary skills for @fpga development and in building
+Ethernet-based smart @nic[s].
 
 The doctoral student has partaken in building a prototype @pio @nic for the
 @pio paper~@ruzhanskaia_rethinking_2024 using SpinalHDL, a hardware description
@@ -356,49 +363,119 @@ message-passing between CPU and device, as well as the foundation for the @rpc
 smart @nic prototype as we discussed in @goals-prototype.
 
 The doctoral student has finished a basic smart @nic that can offload
-unmarshaling of @oncrpc requests based on the @pio @nic prototype.  Further
+unmarshaling of @oncrpc requests based on the @pio @nic prototype;
+implementation of the supporting system software is in progress.  Further
 supplied with the @rpc encoding pipeline, this @nic will be able to demonstrate
-offloading of #[@oncrpc]-based applications like NFS.  The rest of the
-prototype system builds upon this preliminary demo.
+offloading of very simple #[@oncrpc]-based applications like a calculator
+service.  The rest of the prototype system builds upon this preliminary demo.
 
 == Detailed Work Plan #lim[ca 1 page] <work-pkgs>
 
 We list out the exact work packages for each critical aspect of concern, as we
-have previously detailed in #link(<goals>)[Goals of the Thesis].
+have previously detailed in @goals.
 
-=== Base System
+=== Base System <work-pkgs-base-system>
 
-#work-package([Basic @rpc @nic], [3 months]) <basic-nic>
-Work item description
+#work-package([Basic @oncrpc @nic], [3 months]) <basic-nic>
 
-#work-package([Protocol design for HW offloading], [3 months])
+Offload @oncrpc marshaling and unmarshaling in hardware; the CPU core should be
+able to run the @rpc handler by loading a cache line, and to return the results
+by writing to a cache line.  This includes porting a simple demo application
+that builds on @oncrpc to be accelerated by the smart @nic.  We let the Linux
+kernel schedule the user-space applications naively.
+
+During development, we specify expected behaviour and verify correctness of
+hardware we build with @abv paradigms.  These specifications will facilitate
+later formal verification efforts in @specification.
+
+#work-package([Integrated buffer management], [3 months]) <buffer-mgmt>
+
+A solution for allocating memory in the decoding pipeline is needed for
+variable-length fields in the @rpc message.  We exchange memory arenas between
+the CPU and smart @nic to allow decoding and encoding such fields.  This will
+enable more complex @oncrpc services like a @nfs server; we tackle this in
+@real-systems.
+
+/*
+#work-package([Protocol design for HW offloading], [to be determined])
 
 #todo[remove this work package? otherwise, find proper related work in
 @related-work-proto-design]
+*/
 
 #work-package([Integrated task scheduling], [3 months]) <scheduling>
-Work item description
 
-#work-package([Integrated buffer management], [3 months])
-Work item description
+Integrate with the Linux scheduler to steer incoming @rpc requests to worker
+cores that are not busy, replacing the naive approach in @basic-nic.  The smart
+@nic should keep track of states of worker cores with help from internal
+scheduler states, acquired over the cache-coherent interconnect.  We should be
+able to show improvements in tail latency and efficiency in core utilization.
 
 === Deployability
 
-#work-package([Multi-tenancy, Virtualization], [3 months])
-Work item description
+#work-package([Implement real systems with our smart @nic], [6 months]) <real-systems>
 
-#work-package([Instrumentation, Telemetry, Robustness], [3 months])
-Work item description
+Start implementing real workloads with the demo system implemented in
+@basic-nic, while integrating @buffer-mgmt and @scheduling as they become
+ready.  Candidates include a @nfs server, a communication subsystem for
+Dandelion, and micro-service benchmark suites like
+DeathStarBench~@gan_open-source_2019 are potential targets.  We might need to
+implement other serialization protocols like ProtoBuf in @fpga or integrate
+existing IP cores.
+
+#work-package([Telemetry and instrumentation], [3 months]) <telemetry>
+
+Basic telemetry through performance and event counters should already be
+integrated as the system is built in @basic-nic.  We need to further explore
+what to collect for more in-depth tracing by talking to industry partners.
+Trace collection should mostly be done in hardware on the @fpga to avoid
+_degrading_ traced endpoints' performance.  We then need to build tools to
+analyze the collected traces and provide insight.
+
+#work-package([Multi-tenancy and virtualization], [1 year])
+
+Map @pio region into each VM to allow multiplexed access to smart @nic.
+Implement multiple partitions on hardware scheduler from @scheduling to allow
+dispatching to a specific group of cores running the tenant VM.  Hardware
+scheduler in the smart @nic should be able to _wake up_ a specific VM by
+contacting the hypervisor scheduler.  We reason about security and performance
+isolation properties between multiple tenants as part of @specification.
 
 === Security
 
-#work-package([Security through formal verification], [3 months])
-Work item description
+#work-package([Specify all hardware and software components], [6 months]) <specification>
+
+We reuse specifications and models of existing components in the system, for
+example the cache-coherence components in the CPU and @fpga, from previous work
+in the group on conformance testing and specification synthesis.  We manually
+specify new components in the system.  Many components should already be
+partially specified during development and testing in @basic-nic; we bridge the
+gap to allow all specifications to be composed to prove the collective
+correctness property.
+
+#work-package([Prove that implementations match specification], [6 months]) <correctness-proof>
+
+We employ multiple paradigms to check that the implementation of each component
+matches the acquired specification in @specification.  We utilize conventional
+@abv methods like simulation and symbolic execution, as well as blackbox
+testing methods developed in the group.
 
 == Publication Plan
 
-The basic @rpc @nic integrated with task scheduling (@basic-nic and @scheduling)
-should result in one paper in a systems top conference (e.g. ASPLOS, SOSP).
+The basic smart @nic prototype described in @work-pkgs-base-system, together
+with one real system implementation in @real-systems, should warrant one paper
+in a systems top conference (e.g.  ASPLOS, SOSP, OSDI, etc.).  Virtualization
+and multi-tenancy support is complicated enough for a separate publication in
+similar venues.
+
+Telemetry and instrumentation work from @telemetry can result in a good paper
+in conferences like SIGMETRICS; coupled with network-level characterization we
+might get into NSDI.
+
+Specifying (@specification) and verifying (@correctness-proof) all system
+components can lead to a paper in security conferences like S&P.  We might have
+to develop new specification and verification methods, which would result in a
+paper in conferences on formal methods like FM.
 
 == Time Schedule #lim[ca #half page]
 
