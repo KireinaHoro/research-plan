@@ -11,9 +11,9 @@
 
 #import "@preview/glossarium:0.4.1": make-glossary, print-glossary, gls, glspl
 #show: make-glossary
-
-#import "@preview/cetz:0.2.2"
 #import "glossary.typ": glossary
+
+#import "@preview/timeliney:0.0.1"
 
 #let show-page-limits = false
 #let lim(len) = if show-page-limits { text(blue)[(#len)] }
@@ -381,7 +381,7 @@ have previously detailed in @goals.
 
 === Base System <work-pkgs-base-system>
 
-#work-package([Basic @oncrpc @nic], [3 months]) <basic-nic>
+#work-package([Basic @oncrpc @nic], [9 months]) <basic-nic>
 
 Offload @oncrpc marshaling and unmarshaling in hardware; the CPU core should be
 able to run the @rpc handler by loading a cache line, and to return the results
@@ -416,7 +416,7 @@ cores that are not busy, replacing the naive approach in @basic-nic.  The smart
 scheduler states, acquired over the cache-coherent interconnect.  We should be
 able to show improvements in tail latency and efficiency in core utilization.
 
-=== Deployability
+=== Deployability <work-pkgs-deployability>
 
 #work-package([Implement real systems with our smart @nic], [6 months]) <real-systems>
 
@@ -437,7 +437,7 @@ Trace collection should mostly be done in hardware on the @fpga to avoid
 _degrading_ traced endpoints' performance.  We then need to build tools to
 analyze the collected traces and provide insight.
 
-#work-package([Multi-tenancy and virtualization], [1 year])
+#work-package([Multi-tenancy and virtualization], [9 months]) <multi-tenancy>
 
 Map @pio region into each VM to allow multiplexed access to smart @nic.
 Implement multiple partitions on hardware scheduler from @scheduling to allow
@@ -446,7 +446,7 @@ scheduler in the smart @nic should be able to _wake up_ a specific VM by
 contacting the hypervisor scheduler.  We reason about security and performance
 isolation properties between multiple tenants as part of @specification.
 
-=== Security
+=== Security <work-pkgs-security>
 
 #work-package([Specify all hardware and software components], [6 months]) <specification>
 
@@ -484,17 +484,113 @@ paper in conferences on formal methods like FM.
 
 == Time Schedule #lim[ca #half page]
 
-#todo[draw a Gantt diagram with the @work-pkgs defined above]
+#{
 
-#cetz.canvas({
-  import cetz.draw: *
+show link: emph
+set text(size: 10pt)
 
-  circle((0, 0), name: "circle")
+timeliney.timeline(
+  show-grid: true,
+  grid-style: (stroke: (
+    dash: "dotted",
+    thickness: .7pt,
+    paint: rgb("#aaaaaa"),
+  )),
+  {
+    import timeliney: *
 
-  fill(red)
-  stroke(none)
-  circle("circle.east", radius: 0.3)
-})
+    let num-years = 4
+    let start-year = 24
+
+    headerline(group([*#{sym.quote.single}23*]),
+      ..range(num-years).map(n => group(([*#sym.quote.single#{start-year+n}*], 4))))
+    headerline(group([Q4]),
+      ..range(num-years).map(_ => group(..range(4).map(n => "Q" + str(n + 1)))))
+
+    let actual-work = (stroke: 2pt + gray)
+    let depend = (stroke: (paint: red, dash: "dotted"))
+
+    taskgroup(title: [*@work-pkgs-base-system*], {
+      task("Basic NIC",
+        (from: .75, to: 5,      style: actual-work))
+      task("Task sched.",
+        (from: 5,   to: 6,      style: actual-work))
+      task("Buffer mgmt.",
+        (from: 6,   to: 7,      style: actual-work))
+    })
+
+    taskgroup(title: [*@work-pkgs-deployability*], {
+      task("Real systems",
+        // (from: 5,   to: 7,      style: depend),
+        (from: 7,   to: 8,      style: actual-work))
+      task("Instrumentation",
+        // (from: 5,   to: 8,      style: depend),
+        (from: 8,   to: 9,      style: actual-work))
+      task("Multi-tenancy",
+        // (from: 5,   to: 10,     style: depend),
+        (from: 9,  to: 12,     style: actual-work))
+    })
+
+    taskgroup(title: [*@work-pkgs-security*], {
+      task("Specification",
+        (from: 3,   to: 7,      style: actual-work),
+        (from: 10,  to: 13,     style: actual-work))
+      task("Verification",
+        (from: 7,   to: 10,     style: actual-work),
+        (from: 13,  to: 15,     style: actual-work))
+    })
+
+    milestone(
+      at: 0.75,
+      style: (stroke: (dash: "dashed")),
+      align(center, [
+        *Start of doctorate*\
+        Dec 2023
+      ])
+    )
+
+    milestone(
+      at: 4.25,
+      style: (stroke: (dash: "dashed")),
+      align(center, [
+        *Today*\
+        Oct 2024
+      ])
+    )
+
+    milestone(
+      at: 7,
+      style: (stroke: (dash: "dashed")),
+      align(center, [_ASPLOS #{sym.quote.single}26_])
+    )
+
+    milestone(
+      at: 9,
+      style: (stroke: (dash: "dashed")),
+      align(center, [_NSDI #{sym.quote.single}26_])
+    )
+
+    milestone(
+      at: 10,
+      style: (stroke: (dash: "dashed")),
+      align(center, [_FM #{sym.quote.single}26_])
+    )
+
+    milestone(
+      at: 12,
+      style: (stroke: (dash: "dashed")),
+      align(center, [_ASPLOS #{sym.quote.single}27_])
+    )
+
+    milestone(
+      at: 15,
+      style: (stroke: (dash: "dashed")),
+      align(center, [_FM #{sym.quote.single}27_])
+    )
+  }
+)
+
+}
 
 == References #lim[ca 1 page]
 
