@@ -469,18 +469,16 @@ testing methods developed in the group.
 
 The basic smart @nic prototype described in @work-pkgs-base-system, together
 with one real system implementation in @real-systems, should warrant one paper
-in a systems top conference (e.g.  ASPLOS, SOSP, OSDI, etc.).  Virtualization
-and multi-tenancy support is complicated enough for a separate publication in
-similar venues.
+in systems top conferences like ASPLOS.  Virtualization and multi-tenancy
+support is complicated enough for a separate publication in similar venues.
 
-Telemetry and instrumentation work from @telemetry can result in a good paper
-in conferences like SIGMETRICS; coupled with network-level characterization we
-might get into NSDI.
+Telemetry and instrumentation work from @telemetry coupled with network-level
+characterization can result in a good paper in conferences like NSDI.
 
 Specifying (@specification) and verifying (@correctness-proof) all system
-components can lead to a paper in security conferences like S&P.  We might have
-to develop new specification and verification methods, which would result in a
-paper in conferences on formal methods like FM.
+components can lead to a paper in formal methods conferences like FM.  We might
+have to develop new specification and verification methods, which would result
+in a second paper there.
 
 == Time Schedule #lim[ca #half page]
 
@@ -512,9 +510,9 @@ timeliney.timeline(
 
     taskgroup(title: [*@work-pkgs-base-system*], {
       task("Basic NIC",
-        (from: .75, to: 5,      style: actual-work))
+        (from: .75, to: 4.5,      style: actual-work))
       task("Task sched.",
-        (from: 5,   to: 6,      style: actual-work))
+        (from: 4,   to: 6,      style: actual-work))
       task("Buffer mgmt.",
         (from: 6,   to: 7,      style: actual-work))
     })
