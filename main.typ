@@ -15,7 +15,7 @@
 #import "@preview/cetz:0.2.2"
 #import "glossary.typ": glossary
 
-#let show-page-limits = true
+#let show-page-limits = false
 #let lim(len) = if show-page-limits { text(blue)[(#len)] }
 #let half = [\u{00bd}]
 
@@ -233,17 +233,6 @@ closely with the authors towards deriving specifications for all hardware
 components in the system.
 
 == Goals of the Thesis #lim[ca 2-3 pages] <goals>
-
-#show ref: it => {
-  if not is-glossary(it.target) {
-    let t = query(it.target).first()
-    if t.numbering == none {
-      link(it.target, emph(t.body))
-    } else { it }
-  } else {
-    it
-  }
-}
 
 First and foremost, we need a base prototype system to demonstrate the
 feasibility of our approach to higher efficiency; we explain this in

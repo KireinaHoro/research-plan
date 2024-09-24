@@ -49,7 +49,21 @@
       box(stroke: aqua, it)
     }
   }
-  #show ref: box.with(stroke: lime)
+  #show ref: it => {
+    if not is-glossary(it.target) {
+      let t = query(it.target).first()
+      // use name of section instead of number, unless it's a work package
+      let is-wp = t.has("kind") and t.kind == "work-package"
+      if t.numbering == none or not is-wp {
+        link(it.target, box(emph(t.body), stroke: lime))
+      } else {
+        box(it, stroke: lime)
+      }
+    } else {
+      it
+    }
+  }
+
 
   // D-INFK doctoral administration header & footer
   #set page(
