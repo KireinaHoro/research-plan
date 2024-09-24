@@ -23,7 +23,12 @@
 #let us_rgx = regex("(\d) us\b")
 #show us_rgx: it => [#it.text.match(us_rgx).captures.first() #{sym.mu}s]
 
+// comment function for mothy
+#let mothy(msg) = text(blue, [*Mothy*: #msg])
+
 = Research Proposal
+
+#mothy[example comment from mothy.  *strong text* _emph text_]
 
 == Abstract #lim[max #half page]
 
@@ -300,7 +305,7 @@ benefit from an offloaded @rpc smart @nic for implementing communication
 between worker nodes.  We plan to work with their team such that the
 communication subsystems in Dandelion is built on our system.
 DeathStarBench~@gan_open-source_2019 is the _de-facto_ standard for
-benchmarking micro-service systems and would a good candidate as well.  This
+benchmarking micro-service systems and would be a good candidate as well.  This
 process will expose practicality issues in our design and implementation,
 allowing us to further improve deployability for production systems.
 
