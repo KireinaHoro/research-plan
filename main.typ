@@ -348,6 +348,9 @@ the implementation upholds the formal contract.  We verify hardware components
 with various @abv techniques and software components with program verifiers.
 We can then compose all specifications of components, abstract away
 implementation details, and prove the higher-level correctness property.
+Through specifying and verifying our prototype system, we can then derive
+design principles and verification techniques that can generalize to other
+systems in a broader domain.
 
 == Progress to Date #lim[ca 1/2 page] <progress-to-date>
 
