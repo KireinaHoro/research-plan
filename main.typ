@@ -1,6 +1,6 @@
 #import "infk-doctoral-plan.typ": document, todo, work-package, is-glossary
 #show: document.with(
-  student-name: [Pengcheng Xu (referred to as the Doctoral Student)],
+  student-name: [Pengcheng Xu],
   student-number: [21-951-876],
   supervisor-name: [Prof. Dr. Timothy Roscoe],
   second-advisor-name: [To Be Determined],
