@@ -145,7 +145,7 @@
     doc
   }
 
-  #pagebreak()
+  #pagebreak(weak: true)
 
   = Signatures
 

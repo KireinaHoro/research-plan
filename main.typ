@@ -598,6 +598,8 @@ timeliney.timeline(
     glossary)
 }
 
+#pagebreak(weak: true)
+
 = Teaching Responsibilities
 
 = Other Duties
