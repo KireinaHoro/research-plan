@@ -383,11 +383,11 @@ have previously detailed in @goals.
 #work-package([@oncrpc offloading], [6 months]) <basic-nic>
 
 Build upon the ECI @nic done in @progress-to-date and offload @oncrpc
-marshaling and unmarshaling in hardware; the CPU core should be able to run the
-@rpc handler by loading a cache line, and to return the results by writing to a
-cache line.  This includes porting a simple demo application that builds on
-@oncrpc to be accelerated by the smart @nic.  We let the Linux kernel schedule
-the user-space applications naively.
+marshaling and unmarshaling in hardware.  The CPU core should be able to start
+the @rpc handler with information from a cache line, and able to return the
+results by writing to a cache line.  This includes porting a simple demo
+application that builds on @oncrpc to be accelerated by the smart @nic.  We let
+the Linux kernel schedule the userspace @rpc application naively.
 
 During development, we specify expected behavior and verify correctness of
 hardware we build with @abv paradigms.  These specifications will facilitate
