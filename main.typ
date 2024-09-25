@@ -18,7 +18,7 @@
 #let show-page-limits = false
 #let lim(len) = if show-page-limits { text(blue, fractions: true)[(#len)] }
 
-// replace microsecond with greek letter
+// replace microsecond with Greek letter
 #let us_rgx = regex("(\d) us\b")
 #show us_rgx: it => [#it.text.match(us_rgx).captures.first() #{sym.mu}s]
 
@@ -44,12 +44,12 @@ communication through a co-design of hardware and operating system, utilizing
 emerging cache-coherent interconnect standards between CPUs and custom-built
 #glspl("nic", long: false).  We focus on three main aspects for building a
 successful solution: efficiency, deployability, and provable security.  We
-pursue high efficieny by building a cache-coherent smart @nic[s] with protocol
+pursue high efficiency by building a cache-coherent smart @nic[s] with protocol
 offloading capabilities, aiming to eliminate all existing communication
 overheads.  We ensure deployability by designing our software and hardware with
 attention to requirements in production environments, such as multi-tenancy,
 inspection and telemetry, and debugging.  We target provable security by
-formally verifying critical software and hardware components introduced, as
+formally verifying critical software and hardware components we introduce, as
 well as how they interact with existing components.
 
 #pagebreak(weak: true)
@@ -75,7 +75,7 @@ handling events from the @nic via @irq[s], and to deliver packet data to the
 correct user space application.  All these overheads come on top of the actual
 CPU cycles spent executing the actual @rpc handler.  Many of these overheads
 are fixed, not scaling with the size of the request and response, meaning that
-they dispropotionately impact short invocations and significantly lowering
+they disproportionately impact short invocations and significantly lowering
 efficiency in their processing.  These overheads contradict with the ever
 increasing demand for higher processing efficiency by datacenters.
 
@@ -120,7 +120,7 @@ Various industry standards for cache-coherent interconnects in datacenters have
 been under development and are gradually seeing wider adoption.  Examples in
 this field include OpenCAPI, Gen-Z, and CCIX; these protocols are based on
 different physical layer standards and upper protocols.  They have been
-superceded by and largely absorbed into CXL, which aims to the one standard
+superseded by and largely absorbed into CXL, which aims to the one standard
 interoperable interconnect standard across vendors.  While CXL has been hyped
 by many researchers, adoption has been slow due to lack of hardware
 implementation.
@@ -186,7 +186,7 @@ Buffer management is an important topic for offloading @rpc to smart @nic[s].
 Zerializer~@wolnikowski_zerializer_2021 passes memory _arenas_ containing @rpc
 objects between the @nic and CPU over PCIe to achieve zero-copy serialization
 and deserialization; ProtoAcc~@karandikar_hardware_2021 from Berkeley adopts a
-similar approach over a tightly-coupled coprocessor interface.  We might be
+similar approach over a tightly-coupled co-processor interface.  We might be
 able to explore further in this field with customized cache line-level
 protocols on cache-coherent interconnects.
 
@@ -224,13 +224,13 @@ introduced to datacenter systems; the critical nature warrants extensive
 verification effort for their functional correctness.  Conventional hardware
 verification focuses on @abv~@witharana_survey_2022 against properties
 specified in various logic domains.  These properties can be either written by
-hand or generated from higher-level behavioural models of the final system.
+hand or generated from higher-level behavioral models of the final system.
 They can then be checked in an automated fashion with simulation or formal
 methods.  We plan to integrate with prior models developed in the research
 group for cache-coherent interconnects to derive properties and employ standard
 techniques to prove the functional correctness of our custom hardware.
 
-_Specification synthesis_ is a method to extract behavioural specifications
+_Specification synthesis_ is a method to extract behavioral specifications
 from a black-box component.  Schult et.~al.~@schuh_cc-nic_2024 proposed a method to
 test cache-coherence protocol hardware implementations with partial
 specifications.  Their method can be extended to synthesize full specifications
@@ -303,7 +303,7 @@ is a serverless scheduler and runtime developed in the Systems Group; the
 project would benefit from an offloaded @rpc smart @nic for implementing
 communication between worker nodes.  We plan to work with their team such that
 the communication subsystems in Dandelion is built on our system.
-DeathStarBench~@gan_open-source_2019 is the _de-facto_ standard for
+DeathStarBench~@gan_open-source_2019 is the _de facto_ standard for
 benchmarking micro-service systems and would be a good candidate as well.  This
 process will expose practicality issues in our design and implementation,
 allowing us to further improve deployability for production systems.
@@ -337,7 +337,7 @@ Security problems are also deployability problems: smart @nic[s] sit at the
 choke point between a server and the network, warranting high assurance in
 order to be deployed large scale.  First and foremost we need to verify that
 the smart @nic's _functional correctness_.  We first need to specify what is
-the correct behaviour of the smart @nic and OS formally, by defining
+the correct behavior of the smart @nic and OS formally, by defining
 _contracts_ for each part of the system.  Some of these contracts can be
 automatically derived from protocols imposed by existing components of the
 system, for example a model of the cache-coherence protocol.  We will also need
@@ -354,7 +354,7 @@ implementation details, and prove the higher-level correctness property.
 The doctoral student has previously finished his master thesis on porting the
 PsPIN smart @nic platform to Xilinx @fpga[s], which are from the same vendor as
 @fpga[s] in Enzian.  FPsPIN~@schneider_fpspin_2024 combines the Corundum @fpga
-@nic platform with PsPIN to create a prototype Ethernet smartNIC.  This work
+@nic platform with PsPIN to create a prototype Ethernet smart @nic.  This work
 helped him acquire necessary skills for @fpga development and in building
 Ethernet-based smart @nic[s].
 
@@ -389,7 +389,7 @@ cache line.  This includes porting a simple demo application that builds on
 @oncrpc to be accelerated by the smart @nic.  We let the Linux kernel schedule
 the user-space applications naively.
 
-During development, we specify expected behaviour and verify correctness of
+During development, we specify expected behavior and verify correctness of
 hardware we build with @abv paradigms.  These specifications will facilitate
 later formal verification efforts in @specification.
 
@@ -662,7 +662,7 @@ following courses:
 )
 
 A provisional schedule for lectures the doctoral student will partake, subject
-to changes due to course offerings, is as follows.
+to changes due to course offering variations, is as follows.
 
 #table(
   columns: (1fr, 4fr, 1fr),
