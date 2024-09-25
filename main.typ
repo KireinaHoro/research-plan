@@ -646,10 +646,12 @@ Further administrative tasks may be assigned to the Doctoral Student based on
 research, teaching, and study workload as agreed upon with the supervising
 professor.
 
+#pagebreak(weak: true)
+
 = Study Plan
 
 The D-INFK department stipulates that every doctoral student shall finish 12
-credits during the studies, with
+ECTS credits during the studies, with
 #link("https://inf.ethz.ch/doctorate/doctoral-study-program/credit_points.html",
 [requirements on recognition of credits]).
 
@@ -664,14 +666,17 @@ the following courses:
   [Autumn 2024], [_Kommunizieren auf Deutsch; B2_], [2 ECTS],
 )
 
-A provisional schedule for lectures the Doctoral Student will partake, subject
-to changes due to course offering variations, is as follows.
+A provisional schedule for lectures the Doctoral Student will partake is as
+follows.  Since course offerings are subject to variation each year, more
+courses than enough are listed.
 
 #table(
   columns: (1fr, 4fr, 1fr),
   stroke: none,
   align: (right, left, right),
-  [Autumn 2025], [_Advanced Corporate Finance I_ (UZH)], [6 ECTS],
+  [Spring 2025], [_Financial Engineering_ (UZH)], [6 ECTS],
+  [Autumn 2025], [_Corporate Finance_ (UZH)], [3 ECTS],
+  [Spring 2026], [_Advanced Banking_ (UZH)], [6 ECTS],
   [Autumn 2026], [_Asset Management: Advanced Investments_ (UZH)], [3 ECTS],
 )
 
