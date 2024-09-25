@@ -44,11 +44,11 @@ communication through a co-design of hardware and operating system, utilizing
 emerging cache-coherent interconnect standards between CPUs and custom-built
 #glspl("nic", long: false).  We focus on three main aspects for building a
 successful solution: efficiency, deployability, and provable security.  We
-pursue high efficiency by building a cache-coherent smart @nic[s] with protocol
+pursue high efficiency by building a cache-coherent smart @nic with protocol
 offloading capabilities, aiming to eliminate all existing communication
 overheads.  We ensure deployability by designing our software and hardware with
 attention to requirements in production environments, such as multi-tenancy,
-inspection and telemetry, and debugging.  We target provable security by
+telemetry and instrumentation, and debugging.  We target provable security by
 formally verifying critical software and hardware components we introduce, as
 well as how they interact with existing components.
 
@@ -298,11 +298,12 @@ thus making a promising case for our latency target.
 === Deployability <goals-deployability>
 
 Apart from evaluating our system with synthetic benchmarks, we plan to show
-deployability of the system by porting existing workloads onto it.  Dandelion
-is a serverless scheduler and runtime developed in the Systems Group; the
-project would benefit from an offloaded @rpc smart @nic for implementing
-communication between worker nodes.  We plan to work with their team such that
-the communication subsystems in Dandelion is built on our system.
+deployability of the system by porting existing workloads onto it.  We can
+implement an @nfs server with the @oncrpc offloading support.  Dandelion is a
+serverless scheduler and runtime developed in the Systems Group; the project
+would benefit from an offloaded @rpc smart @nic for implementing communication
+between worker nodes.  We plan to work with their team such that the
+communication subsystems in Dandelion is built on our system.
 DeathStarBench~@gan_open-source_2019 is the _de facto_ standard for
 benchmarking micro-service systems and would be a good candidate as well.  This
 process will expose practicality issues in our design and implementation,
@@ -508,10 +509,10 @@ timeliney.timeline(
     import timeliney: *
 
     let num-years = 5
-    let start-year = 23
+    let start-year = 2023
 
     headerline(..range(num-years).map(n =>
-        group(([*#sym.quote.single#{start-year+n}*], 4))))
+        group(([*#{start-year+n}*], 4))))
     headerline(..range(num-years).map(_ =>
         group(..range(4).map(n => "Q" + str(n + 1)))))
 
