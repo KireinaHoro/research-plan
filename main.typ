@@ -350,7 +350,7 @@ with various @abv techniques and software components with program verifiers.
 We can then compose all specifications of components, abstract away
 implementation details, and prove the higher-level correctness property.
 
-== Progress to Date #lim[ca #half page]
+== Progress to Date #lim[ca #half page] <progress-to-date>
 
 The doctoral student has previously finished his master thesis on porting the
 PsPIN smart @nic platform to Xilinx @fpga[s], which are from the same vendor as
@@ -381,13 +381,14 @@ have previously detailed in @goals.
 
 === Base System <work-pkgs-base-system>
 
-#work-package([Basic @oncrpc @nic], [9 months]) <basic-nic>
+#work-package([@oncrpc offloading], [6 months]) <basic-nic>
 
-Offload @oncrpc marshaling and unmarshaling in hardware; the CPU core should be
-able to run the @rpc handler by loading a cache line, and to return the results
-by writing to a cache line.  This includes porting a simple demo application
-that builds on @oncrpc to be accelerated by the smart @nic.  We let the Linux
-kernel schedule the user-space applications naively.
+Build upon the ECI @nic done in @progress-to-date and offload @oncrpc
+marshaling and unmarshaling in hardware; the CPU core should be able to run the
+@rpc handler by loading a cache line, and to return the results by writing to a
+cache line.  This includes porting a simple demo application that builds on
+@oncrpc to be accelerated by the smart @nic.  We let the Linux kernel schedule
+the user-space applications naively.
 
 During development, we specify expected behaviour and verify correctness of
 hardware we build with @abv paradigms.  These specifications will facilitate
@@ -418,7 +419,7 @@ able to show improvements in tail latency and efficiency in core utilization.
 
 === Deployability <work-pkgs-deployability>
 
-#work-package([Implement real systems with our smart @nic], [6 months]) <real-systems>
+#work-package([Implement real systems with our smart @nic], [3 months]) <real-systems>
 
 Start implementing real workloads with the demo system implemented in
 @basic-nic, while integrating @buffer-mgmt and @scheduling as they become
@@ -428,7 +429,7 @@ DeathStarBench~@gan_open-source_2019 are potential targets.  We might need to
 implement other serialization protocols like ProtoBuf in @fpga or integrate
 existing IP cores.
 
-#work-package([Telemetry and instrumentation], [3 months]) <telemetry>
+#work-package([Telemetry and instrumentation], [6 months]) <telemetry>
 
 Basic telemetry through performance and event counters should already be
 integrated as the system is built in @basic-nic.  We need to further explore
@@ -437,7 +438,7 @@ Trace collection should mostly be done in hardware on the @fpga to avoid
 _degrading_ traced endpoints' performance.  We then need to build tools to
 analyze the collected traces and provide insight.
 
-#work-package([Multi-tenancy and virtualization], [9 months]) <multi-tenancy>
+#work-package([Multi-tenancy and virtualization], [6 months]) <multi-tenancy>
 
 Map @pio region into each VM to allow multiplexed access to smart @nic.
 Implement multiple partitions on hardware scheduler from @scheduling to allow
@@ -448,7 +449,7 @@ isolation properties between multiple tenants as part of @specification.
 
 === Security <work-pkgs-security>
 
-#work-package([Specify all hardware and software components], [6 months]) <specification>
+#work-package([Specify all hardware and software components], [continuous target]) <specification>
 
 We reuse specifications and models of existing components in the system, for
 example the cache-coherence components in the CPU and @fpga, from previous work
@@ -458,12 +459,18 @@ partially specified during development and testing in @basic-nic; we bridge the
 gap to allow all specifications to be composed to prove the collective
 correctness property.
 
-#work-package([Prove that implementations match specification], [6 months]) <correctness-proof>
+The specification process happens along with system design and implementation
+and thus does not have a fixed time goal.
+
+#work-package([Prove that implementations match specification], [continuous target]) <correctness-proof>
 
 We employ multiple paradigms to check that the implementation of each component
 matches the acquired specification in @specification.  We utilize conventional
 @abv methods like simulation and symbolic execution, as well as blackbox
 testing methods developed in the group.
+
+The proof process happens along with specification extraction and thus does not
+have a fixed time goal.
 
 == Publication Plan
 
@@ -494,97 +501,81 @@ timeliney.timeline(
     thickness: .7pt,
     paint: rgb("#aaaaaa"),
   )),
+  milestone-line-style: (stroke: (dash: "dashed")),
   {
     import timeliney: *
 
-    let num-years = 4
-    let start-year = 24
+    let num-years = 5
+    let start-year = 23
 
-    headerline(group([*#{sym.quote.single}23*]),
-      ..range(num-years).map(n => group(([*#sym.quote.single#{start-year+n}*], 4))))
-    headerline(group([Q4]),
-      ..range(num-years).map(_ => group(..range(4).map(n => "Q" + str(n + 1)))))
+    headerline(..range(num-years).map(n =>
+        group(([*#sym.quote.single#{start-year+n}*], 4))))
+    headerline(..range(num-years).map(_ =>
+        group(..range(4).map(n => "Q" + str(n + 1)))))
 
     let actual-work = (stroke: 2pt + gray)
     let depend = (stroke: (paint: red, dash: "dotted"))
 
+    taskgroup(title: link(<progress-to-date>, [*_Preparation_*]), {
+      task("FPsPIN",
+        (from: 1,   to: 3.25,   style: actual-work))
+      task("ECI NIC",
+        (from: 3.75,to: 6.25,   style: actual-work))
+    })
+
     taskgroup(title: [*@work-pkgs-base-system*], {
-      task("Basic NIC",
-        (from: .75, to: 4.5,      style: actual-work))
+      task("RPC offload",
+        (from: 6,   to: 8,      style: actual-work))
       task("Task sched.",
-        (from: 4,   to: 6,      style: actual-work))
+        (from: 8,   to: 9,      style: actual-work))
       task("Buffer mgmt.",
-        (from: 6,   to: 7,      style: actual-work))
+        (from: 9,   to: 10,     style: actual-work))
     })
 
     taskgroup(title: [*@work-pkgs-deployability*], {
       task("Real systems",
-        // (from: 5,   to: 7,      style: depend),
-        (from: 7,   to: 8,      style: actual-work))
+        (from: 10,  to: 11,     style: actual-work))
       task("Instrumentation",
-        // (from: 5,   to: 8,      style: depend),
-        (from: 8,   to: 9,      style: actual-work))
+        (from: 11,  to: 13,     style: actual-work))
       task("Multi-tenancy",
-        // (from: 5,   to: 10,     style: depend),
-        (from: 9,  to: 12,     style: actual-work))
+        (from: 13,  to: 15,     style: actual-work))
     })
 
     taskgroup(title: [*@work-pkgs-security*], {
       task("Specification",
-        (from: 3,   to: 7,      style: actual-work),
-        (from: 10,  to: 13,     style: actual-work))
+        (from: 6,   to: 10,     style: actual-work),
+        (from: 13,  to: 16,     style: actual-work))
       task("Verification",
-        (from: 7,   to: 10,     style: actual-work),
-        (from: 13,  to: 15,     style: actual-work))
+        (from: 10,  to: 12,     style: actual-work),
+        (from: 16,  to: 18,     style: actual-work))
     })
 
-    milestone(
-      at: 0.75,
-      style: (stroke: (dash: "dashed")),
+    milestone(at: 3.75,
       align(center, [
         *Start of doctorate*\
         Dec 2023
-      ])
-    )
+      ]))
 
-    milestone(
-      at: 4.25,
-      style: (stroke: (dash: "dashed")),
+    milestone(at: 7.25,
       align(center, [
         *Today*\
         Oct 2024
-      ])
-    )
+      ]))
 
-    milestone(
-      at: 7,
-      style: (stroke: (dash: "dashed")),
-      align(center, [_ASPLOS #{sym.quote.single}26_])
-    )
+    milestone(at: 11,
+      [_ASPLOS #{sym.quote.single}26_#h(2em)])
 
-    milestone(
-      at: 9,
-      style: (stroke: (dash: "dashed")),
-      align(center, [_NSDI #{sym.quote.single}26_])
-    )
+    milestone(at: 12,
+      [_FM #{sym.quote.single}26_])
 
-    milestone(
-      at: 10,
-      style: (stroke: (dash: "dashed")),
-      align(center, [_FM #{sym.quote.single}26_])
-    )
+    milestone(at: 13,
+      [#h(2em)_NSDI #{sym.quote.single}26_])
 
-    milestone(
-      at: 12,
-      style: (stroke: (dash: "dashed")),
-      align(center, [_ASPLOS #{sym.quote.single}27_])
-    )
+    milestone(at: 15,
+      [_ASPLOS #{sym.quote.single}27_])
 
-    milestone(
-      at: 15,
-      style: (stroke: (dash: "dashed")),
-      align(center, [_FM #{sym.quote.single}27_])
-    )
+    milestone(at: 18,
+      [_FM #{sym.quote.single}27_])
   }
 )
 
