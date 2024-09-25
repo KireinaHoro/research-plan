@@ -145,7 +145,7 @@ latency.  Extra efficiency can be achieved with cache-coherent interconnects
 other than PCIe.  Dagger~@lazarev_dagger_2021 builds on the UPI/CCI-P
 implementation of Intel HARP an @fpga @nic for low-latency @rpc, focusing
 mainly on using the UPI interconnect as a @nic interface to offload @rpc
-protocol processing.  Previous work in the group on
+protocol processing.  Previous work in the research group on
 @pio~@ruzhanskaia_rethinking_2024 showed that it is possible to achieve higher
 efficiency with @pio using cache-coherent interconnects.  Our work builds on
 the basic @nic implementation in~@ruzhanskaia_rethinking_2024 for a full
@@ -226,8 +226,8 @@ verification focuses on @abv~@witharana_survey_2022 against properties
 specified in various logic domains.  These properties can be either written by
 hand or generated from higher-level behavioural models of the final system.
 They can then be checked in an automated fashion with simulation or formal
-methods.  We plan to integrate with prior models developed in the group for
-cache-coherent interconnects to derive properties and employ standard
+methods.  We plan to integrate with prior models developed in the research
+group for cache-coherent interconnects to derive properties and employ standard
 techniques to prove the functional correctness of our custom hardware.
 
 _Specification synthesis_ is a method to extract behavioural specifications
@@ -263,7 +263,7 @@ such as encryption/decryption, compression/decompression, and arguments
 marshaling/unmarshaling to the @fpga as hardware accelerators.  We start with a
 very simple protocol, @oncrpc based on UDP, which is easy to implement in
 hardware but still have popular applications built with it, like @nfs.  We can
-make use of EasyNet, the HLS TCP accelerator developed in the group, to
+make use of EasyNet, the HLS TCP accelerator developed in the Systems Group, to
 implement more complex @rpc protocols.  Encryption and compression are
 orthogonal to the serialization format, and off-the-shelf implementations of
 common cryptography and compression IP cores allow quick integration into our
@@ -299,10 +299,10 @@ thus making a promising case for our latency target.
 
 Apart from evaluating our system with synthetic benchmarks, we plan to show
 deployability of the system by porting existing workloads onto it.  Dandelion
-is a serverless scheduler and runtime developed in the group; the project would
-benefit from an offloaded @rpc smart @nic for implementing communication
-between worker nodes.  We plan to work with their team such that the
-communication subsystems in Dandelion is built on our system.
+is a serverless scheduler and runtime developed in the Systems Group; the
+project would benefit from an offloaded @rpc smart @nic for implementing
+communication between worker nodes.  We plan to work with their team such that
+the communication subsystems in Dandelion is built on our system.
 DeathStarBench~@gan_open-source_2019 is the _de-facto_ standard for
 benchmarking micro-service systems and would be a good candidate as well.  This
 process will expose practicality issues in our design and implementation,
@@ -452,10 +452,10 @@ isolation properties between multiple tenants as part of @specification.
 
 We reuse specifications and models of existing components in the system, for
 example the cache-coherence components in the CPU and @fpga, from previous work
-in the group on conformance testing and specification synthesis.  We manually
-specify new components in the system.  Many components should already be
-partially specified during development and testing in @basic-nic; we bridge the
-gap to allow all specifications to be composed to prove the collective
+in the research group on conformance testing and specification synthesis.  We
+manually specify new components in the system.  Many components should already
+be partially specified during development and testing in @basic-nic; we bridge
+the gap to allow all specifications to be composed to prove the collective
 correctness property.
 
 The specification process happens along with system design and implementation
@@ -466,7 +466,7 @@ and thus does not have a fixed time goal.
 We employ multiple paradigms to check that the implementation of each component
 matches the acquired specification in @specification.  We utilize conventional
 @abv methods like simulation and symbolic execution, as well as blackbox
-testing methods developed in the group.
+testing methods developed in the research group.
 
 The proof process happens along with specification extraction and thus does not
 have a fixed time goal.
@@ -602,7 +602,76 @@ timeliney.timeline(
 
 = Teaching Responsibilities
 
-= Other Duties
+The research group generally expects the doctoral student to teach one course
+per semester.  In case of this could not happen due to lack of a suitable
+teaching position, the student is expected to take on extra administrative
+responsibilities as described in @other-duties.
+
+Since the begin of doctoral studies, the doctoral student has served as the
+head teaching assistant in the following two courses:
+
+#table(
+  columns: (1fr, 5fr),
+  stroke: none,
+  align: (right, left),
+  [Spring 2024], [_Advanced Operating Systems_],
+  [Autumn 2024], [_Systems Programming and Computer Architecture_],
+)
+
+These two courses repeat annually.  It is expected that the doctoral student
+will continue teaching these two courses for the remaining duration of the
+doctoral studies to maximize reuse of experience.
+
+= Other Duties <other-duties>
+
+The Systems Group has several general administrative tasks benefiting all
+research groups related thereof, that are handled by doctoral students in the
+group.  These tasks are assigned to doctoral students on a semester-basis for a
+fair distribution of workload.
+
+Since the begin of doctoral studies, the doctoral student has been in charge of
+the following tasks:
+
+#table(
+  columns: (1fr, 5fr),
+  stroke: none,
+  align: (right, left),
+  [Autumn 2024], [Organizing the _Systems Group Lunch Seminars_],
+)
+
+Further administrative tasks may be assigned to the doctoral student based on
+research, teaching, and study workload as agreed upon with the supervising
+professor.
 
 = Study Plan
+
+The D-INFK department stipulates that each doctoral student shall finish 12
+credits during the studies, with
+#link("https://inf.ethz.ch/doctorate/doctoral-study-program/credit_points.html",
+[requirements on recognition of credits]).
+
+Since the begin of doctoral studies, the doctoral student has partaken in the
+following courses:
+
+#table(
+  columns: (1fr, 4fr, 1fr),
+  stroke: none,
+  align: (right, left, right),
+  [Spring 2024], [_Diskutieren und Präsentieren auf Deutsch; B2-C1_], [2 ECTS],
+  [Autumn 2024], [_Kommunizieren auf Deutsch; B2_], [2 ECTS],
+)
+
+A provisional schedule for lectures the doctoral student will partake, subject
+to changes due to course offerings, is as follows.
+
+#table(
+  columns: (1fr, 4fr, 1fr),
+  stroke: none,
+  align: (right, left, right),
+  [Autumn 2025], [_Advanced Corporate Finance I_ (UZH)], [6 ECTS],
+  [Autumn 2026], [_Asset Management: Advanced Investments_ (UZH)], [3 ECTS],
+)
+
+The doctoral student has verified that the provisional schedule satisfies the
+credit recognition requirements from the department.
 
