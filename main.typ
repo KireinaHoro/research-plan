@@ -16,8 +16,7 @@
 #import "@preview/timeliney:0.0.1"
 
 #let show-page-limits = false
-#let lim(len) = if show-page-limits { text(blue)[(#len)] }
-#let half = [\u{00bd}]
+#let lim(len) = if show-page-limits { text(blue, fractions: true)[(#len)] }
 
 // replace microsecond with greek letter
 #let us_rgx = regex("(\d) us\b")
@@ -30,7 +29,7 @@
 
 #mothy[example comment from mothy.  *strong text* _emph text_]
 
-== Abstract #lim[max #half page]
+== Abstract #lim[max 1/2 page]
 
 Datacenter communication patterns are becoming increasingly oriented towards
 smaller transactions with the recent trend of micro-services and serverless
@@ -350,7 +349,7 @@ with various @abv techniques and software components with program verifiers.
 We can then compose all specifications of components, abstract away
 implementation details, and prove the higher-level correctness property.
 
-== Progress to Date #lim[ca #half page] <progress-to-date>
+== Progress to Date #lim[ca 1/2 page] <progress-to-date>
 
 The doctoral student has previously finished his master thesis on porting the
 PsPIN smart @nic platform to Xilinx @fpga[s], which are from the same vendor as
@@ -487,7 +486,7 @@ components can lead to a paper in formal methods conferences like FM.  We might
 have to develop new specification and verification methods, which would result
 in a second paper there.
 
-== Time Schedule #lim[ca #half page]
+== Time Schedule #lim[ca 1/2 page]
 
 #{
 
