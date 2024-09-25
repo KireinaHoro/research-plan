@@ -1,6 +1,6 @@
 #import "infk-doctoral-plan.typ": document, todo, work-package, is-glossary
 #show: document.with(
-  student-name: [Pengcheng Xu],
+  student-name: [Pengcheng Xu (referred to as the Doctoral Student)],
   student-number: [21-951-876],
   supervisor-name: [Prof. Dr. Timothy Roscoe],
   second-advisor-name: [To Be Determined],
@@ -351,14 +351,14 @@ implementation details, and prove the higher-level correctness property.
 
 == Progress to Date #lim[ca 1/2 page] <progress-to-date>
 
-The doctoral student has previously finished his master thesis on porting the
+The Doctoral Student has previously finished his master thesis on porting the
 PsPIN smart @nic platform to Xilinx @fpga[s], which are from the same vendor as
 @fpga[s] in Enzian.  FPsPIN~@schneider_fpspin_2024 combines the Corundum @fpga
 @nic platform with PsPIN to create a prototype Ethernet smart @nic.  This work
 helped him acquire necessary skills for @fpga development and in building
 Ethernet-based smart @nic[s].
 
-The doctoral student has partaken in building a prototype @pio @nic for the
+The Doctoral Student has partaken in building a prototype @pio @nic for the
 @pio paper~@ruzhanskaia_rethinking_2024 using SpinalHDL, a hardware description
 language embedded in Scala.  The basic @nic prototype passes raw Ethernet
 frames between a CPU core and the @fpga attached over ECI using a variant of
@@ -366,7 +366,7 @@ the 2Fast2Forward protocol.  It serves as a proof-of-concept for
 message-passing between CPU and device, as well as the foundation for the @rpc
 smart @nic prototype as we discussed in @goals-prototype.
 
-The doctoral student has finished a basic smart @nic that can offload
+The Doctoral Student has finished a basic smart @nic that can offload
 unmarshaling of @oncrpc requests based on the @pio @nic prototype;
 implementation of the supporting system software is in progress.  Further
 supplied with the @rpc encoding pipeline, this @nic will be able to demonstrate
@@ -602,12 +602,12 @@ timeliney.timeline(
 
 = Teaching Responsibilities
 
-The research group generally expects the doctoral student to teach one course
+The research group generally expects every doctoral student to teach one course
 per semester.  In case of this could not happen due to lack of a suitable
-teaching position, the student is expected to take on extra administrative
+teaching position, he or she is expected to take on extra administrative
 responsibilities as described in @other-duties.
 
-Since the begin of doctoral studies, the doctoral student has served as the
+Since the beginning of doctoral studies, the Doctoral Student has served as the
 head teaching assistant in the following two courses:
 
 #table(
@@ -618,7 +618,7 @@ head teaching assistant in the following two courses:
   [Autumn 2024], [_Systems Programming and Computer Architecture_],
 )
 
-These two courses repeat annually.  It is expected that the doctoral student
+These two courses repeat annually.  It is expected that the Doctoral Student
 will continue teaching these two courses for the remaining duration of the
 doctoral studies to maximize reuse of experience.
 
@@ -629,8 +629,8 @@ research groups related thereof, that are handled by doctoral students in the
 group.  These tasks are assigned to doctoral students on a semester-basis for a
 fair distribution of workload.
 
-Since the begin of doctoral studies, the doctoral student has been in charge of
-the following tasks:
+Since the beginning of doctoral studies, the Doctoral Student has been in
+charge of the following tasks:
 
 #table(
   columns: (1fr, 5fr),
@@ -639,19 +639,19 @@ the following tasks:
   [Autumn 2024], [Organizing the _Systems Group Lunch Seminars_],
 )
 
-Further administrative tasks may be assigned to the doctoral student based on
+Further administrative tasks may be assigned to the Doctoral Student based on
 research, teaching, and study workload as agreed upon with the supervising
 professor.
 
 = Study Plan
 
-The D-INFK department stipulates that each doctoral student shall finish 12
+The D-INFK department stipulates that every doctoral student shall finish 12
 credits during the studies, with
 #link("https://inf.ethz.ch/doctorate/doctoral-study-program/credit_points.html",
 [requirements on recognition of credits]).
 
-Since the begin of doctoral studies, the doctoral student has partaken in the
-following courses:
+Since the beginning of doctoral studies, the Doctoral Student has partaken in
+the following courses:
 
 #table(
   columns: (1fr, 4fr, 1fr),
@@ -661,7 +661,7 @@ following courses:
   [Autumn 2024], [_Kommunizieren auf Deutsch; B2_], [2 ECTS],
 )
 
-A provisional schedule for lectures the doctoral student will partake, subject
+A provisional schedule for lectures the Doctoral Student will partake, subject
 to changes due to course offering variations, is as follows.
 
 #table(
@@ -672,6 +672,6 @@ to changes due to course offering variations, is as follows.
   [Autumn 2026], [_Asset Management: Advanced Investments_ (UZH)], [3 ECTS],
 )
 
-The doctoral student has verified that the provisional schedule satisfies the
+The Doctoral Student has verified that the provisional schedule satisfies the
 credit recognition requirements from the department.
 
