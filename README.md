@@ -1,5 +1,7 @@
 # Doctoral Plan
 
+[Latest version](https://gitlab.inf.ethz.ch/OU-ROSCOE/phd-thesis-research-proposals/doctoral-plan-pengxu/-/jobs/artifacts/master/raw/main.pdf?job=build) built by CI
+
 Written in Typst; a crash course on how to write in the language is
 [here](https://typst.app/docs/tutorial/writing-in-typst/).  Install [the
 compiler](https://github.com/typst/typst) by downloading a [binary
