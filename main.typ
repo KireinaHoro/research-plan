@@ -650,6 +650,24 @@ doctoral studies to maximize reuse of experience.
 
 = Other Duties <other-duties>
 
+The research group offers bachelor's thesis, master's thesis, and semester
+projects to students at ETH.  Doctoral students in the research group are
+expected to supervise student projects related to their research area.
+
+Since the beginning of doctoral studies, the Doctoral Student has supervised
+the following theses and projects:
+
+#table(
+  columns: (1fr, 3.5fr, 1.5fr),
+  stroke: none,
+  align: (right, left, right),
+  [Spring 2024], [_Hybrid FPGA-Accelerator Encryption and Compression_], [Tobias Müller],
+  [Autumn 2024], [_USB Subsystem Support for an OS Course_], [Ramón Buchenberger],
+)
+
+The Doctoral Student will continue to supervise future students in related
+research fields provided that overall research and studying workload allows.
+
 The Systems Group has several general administrative tasks benefiting all
 research groups related thereof, that are handled by doctoral students in the
 group.  These tasks are assigned to doctoral students on a semester-basis for a
@@ -666,7 +684,7 @@ charge of the following tasks:
 )
 
 Further administrative tasks may be assigned to the Doctoral Student based on
-research, teaching, and study workload as agreed upon with the supervising
+research, teaching, and studying workload as agreed upon with the supervising
 professor.
 
 #pagebreak(weak: true)
