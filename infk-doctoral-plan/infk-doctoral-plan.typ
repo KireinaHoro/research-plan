@@ -1,5 +1,23 @@
+/// Draws a horizontal rule; useful for creating signature fields.
+///
+/// *Example:*
+/// #example(```
+/// table(
+///   columns: (auto, 4cm),
+///   stroke: none,
+///   row-gutter: 1em,
+///   [First Person], rule(100%),
+///   [Second Person], rule(100%),
+/// )
+/// ```)
+///
+/// - length (length): Length of the rule to draw.
+/// -> content
 #let rule(length) = line(start: (0pt, 1em), end: (length, 1em))
 
+/// Extract all text from a piece of content.
+/// - content (content): input content to extract from
+/// -> str
 #let to-string(content) = {
   if content.has("text") {
     content.text
@@ -9,19 +27,92 @@
     to-string(content.body)
   } else if content == [ ] {
     " "
+  } else {
+    ""
   }
 }
 
+/// Find the name of previous heading of a given label.
+/// - it (label): Position to search backwards from.
+/// -> str
 #let prev-heading(it) = {
   to-string(query(selector(heading).before(it)).last())
 }
 
-#let is-glossary(it) = {
+/// Check if a given element is inside the glossary section.
+/// - it (any):            Element to check for.
+/// - glossary-name (str): Name of the glossary section.
+/// -> boolean
+#let is-glossary(it, glossary-name: "Glossary") = {
   if type(it) == label {
-    prev-heading(it).match("Glossary") != none
+    prev-heading(it).match(glossary-name) != none
   } else { false }
 }
 
+/// Create a work package header.  Can be further stylized with a show rule.
+///
+/// *Example:*
+///
+/// #example(```
+/// show figure.where(kind: "work-package"): it => [
+///   #let c = counter(figure.where(kind: "work-package"))
+///   #let num = locate(loc => {
+///     numbering(it.numbering, ..c.at(loc))
+///   })
+///   #set text(style: "italic")
+///   WP #num: #it.body #parbreak()
+/// ]
+///
+/// work-package([Implement a demo system], [3 months])
+/// work-package([Test the system], [6 months])
+/// ```, dir: ttb)
+///
+/// - name (content):     Name of the work package.
+/// - duration (content): Duration of the work package.
+/// -> content
+#let work-package(name, duration) = figure(
+  [#name (#duration)],
+  kind: "work-package", supplement: "WP", numbering: "1",
+)
+
+/// Generate a TODO message.  You can use `fill` and `prefix` to create comment
+/// functions for other authors.
+///
+/// *Example:*
+///
+/// #example(`todo[Specify exact system requirements here!]`)
+/// #example(```
+/// let commenter-a = todo.with(fill: blue, prefix: [Commenter A])
+/// let commenter-b = todo.with(fill: orange, prefix: [Commenter B])
+///
+/// commenter-a[Looks a bit messy.]
+/// commenter-b[I agree!]
+/// ```)
+///
+/// - fill (color):       Color of the output text.
+/// - prefix (content):   Prefix of the printed message.
+/// - inline (boolean):
+///     Insert TODO message inline.  If `false`, inserts paragraph breaks
+///     around the message.
+///
+///     Example inline message:
+///     #example(`[We have a paragraph here. #todo(inline: true)[Where?] This is a great paragraph.]`, dir: ttb)
+/// - msg (content):      Content of the TODO message.
+/// -> content
+#let todo(fill: red, prefix: [TODO], inline: false, msg) = {
+  if (not inline) { parbreak() }
+  text(fill, [*#prefix*: #msg])
+  if (not inline) { parbreak() }
+}
+
+/// Template for the doctoral plan.
+/// - student-name (content):        Name of the student.
+/// - student-number (content):      Legi number of the student.
+/// - supervisor-name (content):     Name of the supervisor.
+/// - second-advisor-name (content): Name of the second advisor.
+/// - start-date (datetime):         Start date of the doctoral studies.
+/// - title (content):               Title of the doctoral thesis.
+/// - doc (content):                 Body of the doctoral plan.
 #let document(
   student-name: [Happy Student],
   student-number: [00-000-000],
@@ -78,7 +169,7 @@
     header: grid(
       columns: (6fr, 4fr),
       align: top,
-      image("logo.svg", width: 60%),
+      image("logos/eth.svg", width: 60%),
       [
         #set text(size: 8pt)
         *Department of Camputer Science* \
@@ -160,10 +251,3 @@
     [Date], rule(100%),
   )
 ]
-
-#let work-package(name, duration) = figure(
-  [#name (#duration)],
-  kind: "work-package", supplement: "WP", numbering: "1",
-)
-
-#let todo(msg) = text(red, [*TODO*: #msg])

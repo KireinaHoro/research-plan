@@ -1,4 +1,4 @@
-#import "infk-doctoral-plan.typ": document, todo, work-package, is-glossary
+#import "/infk-doctoral-plan/infk-doctoral-plan.typ": document, todo, work-package, is-glossary
 #show: document.with(
   student-name: [Pengcheng Xu],
   student-number: [21-951-876],
@@ -23,7 +23,7 @@
 #show us_rgx: it => [#it.text.match(us_rgx).captures.first() #{sym.mu}s]
 
 // comment function for mothy
-#let mothy(msg) = text(blue, [*Mothy*: #msg])
+#let mothy = todo.with(fill: blue, prefix: [Mothy])
 
 = Research Proposal
 
