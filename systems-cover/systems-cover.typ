@@ -58,6 +58,7 @@
   v(1fr)
 
   let is-doctoralplan = doc-type == "doctoralplan"
+  let is-semesterproject = doc-type == "semesterproject"
 
   let type-font(body) = if (is-doctoralplan) {
     text(size: 12pt)[#body #parbreak()]
@@ -90,53 +91,66 @@
     text(size: 12.63pt)[#body #parbreak()]
   }
 
-  let num = if (not ("doctoralplan", "semesterproject").contains(doc-type)) [~Nr.~#number]
-
-  let incollaboration = if (collaborator != none) {
-    v(4mm)
-    incollaboration-font[in collaboration with]
-
-    v(3mm)
-    group-font(collaborator)
-  }
-  let supervised-by = if (is-doctoralplan) {
-    v(8mm)
-    author-font[Supervisor: #supervisor]
-    v(3mm)
-    author-font[Second Advisor: #second-advisor]
-  } else if (supervisor != none) {
-    v(8mm)
-    author-font[Supervised by]
-    v(3mm)
-    author-font(supervisor)
-  }
-
   align(center, {
     set text(font: "Arial")
     show par: set block(spacing: 0.3em)
 
-    type-font[#type-to-display.at(doc-type)#num]
+    type-font({
+      type-to-display.at(doc-type)
+      if (not is-doctoralplan and not is-semesterproject) [~Nr.~#number]
+    })
     v(5mm)
+
     group-font[Systems Group, Department of Computer Science, ETH Zurich]
-    incollaboration
+    if (collaborator != none) {
+      v(4mm)
+      incollaboration-font[in collaboration with]
+
+      v(3mm)
+      group-font(collaborator)
+    }
     v(16mm)
+
     title-font(title)
     v(20mm)
-    author-font[by]
-    v(3mm)
-    author-font(author)
-    if (is-doctoralplan) { v(0.2em); author-font(authorinfo) }
-    supervised-by
+
+    author-font({
+      [by]
+      v(3mm)
+      author
+      if (is-doctoralplan) {
+        v(0.2em)
+        authorinfo
+      }
+
+      if (is-doctoralplan) {
+        v(8mm)
+        [Supervisor: #supervisor]
+        v(3mm)
+        [Second Advisor: #second-advisor]
+      } else if (supervisor != none) {
+        v(8mm)
+        [Supervised by]
+        v(3mm)
+        (supervisor)
+      }
+    })
+
     v(15mm)
-    date-font(date)
-    if (is-doctoralplan) { date-font[
-      #set align(left)
-      #set text(style: "italic")
-      #v(30mm)
-      #author is employed as a research assistant since
-      #contract-date.display(dmy-format) and was accepted as a PhD student on
-      #admission-date.display(dmy-format). #additional-info
-    ] }
+    date-font({
+      date
+
+      if (is-doctoralplan) {
+        set align(left)
+        set text(style: "italic")
+        v(30mm)
+      [
+        #author is employed as a research assistant since
+        #contract-date.display(dmy-format) and was accepted as a PhD student on
+        #admission-date.display(dmy-format). #additional-info
+      ]
+      }
+    })
   })
 
   v(1fr)
