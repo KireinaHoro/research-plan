@@ -124,7 +124,6 @@
 ) = [
   // try to mimic the look and feel of the latex template
   #set text(
-    font: "Palatino",
     size: 11pt,
     lang: "en",
     region: "us",
