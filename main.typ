@@ -1,12 +1,34 @@
+#let my-name = [Pengcheng Xu]
+#let my-title = [Co-designing HW and OS for Efficient Datacenter Communication]
+#let my-supervisor = [Prof. Dr. Timothy Roscoe]
+#let my-second-advisor = [To Be Determined]
+#let my-start-date = datetime(year: 2023, month: 12, day: 1)
+
+#import "/systems-cover/systems-cover.typ": cover-page
+#show: cover-page.with(
+  doc-type: "doctoralplan",
+  title: my-title,
+  author: my-name,
+  authorinfo: [
+    STF G 222
+
+    pengcheng.xu\@inf.ethz.ch
+  ],
+  contract-date: my-start-date,
+  admission-date: datetime(year: 2021, month: 9, day: 20),
+  supervisor: my-supervisor,
+  second-advisor: my-second-advisor,
+)
+
 #import "/infk-doctoral-plan/infk-doctoral-plan.typ": document, todo, work-package, is-glossary
 #show: document.with(
-  student-name: [Pengcheng Xu],
+  student-name: my-name,
   student-number: [21-951-876],
-  supervisor-name: [Prof. Dr. Timothy Roscoe],
-  second-advisor-name: [To Be Determined],
+  supervisor-name: my-supervisor,
+  second-advisor-name: my-second-advisor,
   // XXX: do we count from the beginning of contract, or DD enroll?
-  start-date: datetime(year: 2023, month: 12, day: 1),
-  title: [Co-designing HW and OS for Efficient Datacenter Communication],
+  start-date: my-start-date,
+  title: my-title,
 )
 
 #import "@preview/glossarium:0.4.1": make-glossary, print-glossary, gls, glspl
