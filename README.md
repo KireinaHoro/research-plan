@@ -1,4 +1,4 @@
-# Research Plan
+# Doctoral Plan
 
 Written in Typst; a crash course on how to write in the language is
 [here](https://typst.app/docs/tutorial/writing-in-typst/).  Install [the
