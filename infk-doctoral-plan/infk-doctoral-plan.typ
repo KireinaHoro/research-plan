@@ -187,7 +187,7 @@
     footer: grid(
       columns: (1fr, auto, 1fr),
       align: (left, center, right),
-      [Doctoral Plan],
+      [Doctoral Plan #student-name],
       counter(page).display("1"),
       datetime.today().display("[month repr:long] [year]")
     ),
@@ -240,14 +240,18 @@
 
   = Signatures
 
-  #table(
-    columns: (auto, 1fr),
-    stroke: none,
-    row-gutter: 1em,
+  #let signature-blank = { v(1.5cm); rule(70%) }
+  #let date-blank = { v(1.5cm); rule(80%) }
 
-    [Supervisor], rule(100%),
-    [Second Advisor], rule(100%),
-    [Doctoral Student], rule(100%),
-    [Date], rule(100%),
+  #table(
+    columns: (6fr, 4fr),
+    stroke: none,
+
+    signature-blank, date-blank,
+    [Doctoral Student: #student-name], [Date],
+    signature-blank, date-blank,
+    [Supervisor: #supervisor-name], [Date],
+    signature-blank, date-blank,
+    [Second Advisor: #second-advisor-name], [Date],
   )
 ]
