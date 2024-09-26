@@ -1,0 +1,12 @@
+image: alpine
+
+build:
+  stage: build
+  script:
+    - apk add --update curl xz
+    - curl -LO https://github.com/typst/typst/releases/download/v0.11.1/typst-x86_64-unknown-linux-musl.tar.xz
+    - tar xvf typst-x86_64-unknown-linux-musl.tar.xz
+    - typst-x86_64-unknown-linux-musl/typst compile main.typ
+  artifacts:
+    paths:
+      - main.pdf
