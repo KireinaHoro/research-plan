@@ -27,7 +27,7 @@
 
 = Research Proposal
 
-#mothy[example comment from mothy.  *strong text* _emph text_]
+// #mothy[example comment from mothy.  *strong text* _emph text_]
 
 == Abstract #lim[max 1/2 page]
 
